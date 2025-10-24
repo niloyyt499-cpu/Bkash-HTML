@@ -1,23 +1,77 @@
-/* Base styles and utilities from Tailwind/Next.js defaults */
+/* Base styles and utilities (Tailwind Preflight inspired reset) */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-body {
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: "Inter", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.5;
+  background-color: #f3f4f6; /* Default background for the body */
 }
 
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Custom bKash colors (from tailwind.config.json) */
+:root {
+  --bkash-pink: #e3007f;
+  --bkash-light-pink: #ff007f; /* Adjusted, though not explicitly used as background */
+  --bkash-border-gray: #9e9e9e; /* Used for gray text */
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 222.2 84% 4.9%;
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 47.4% 11.2%;
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 47.4% 11.2%;
+  --radius: 0.5rem; /* Equivalent to md */
+}
+
+
+/* Layout and Positioning */
 .flex-center-screen {
   display: flex;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6; /* bg-gray-100 */
-}
-
-.p-4 {
-  padding: 1rem; /* p-4 */
+  /* background-color: #f3f4f6; bg-gray-100 - already set on body */
 }
 
 .flex {
@@ -32,16 +86,29 @@ body {
   align-items: center;
 }
 
-.gap-1 {
-  gap: 0.25rem; /* gap-1 */
+.flex-col {
+  flex-direction: column;
 }
 
-.gap-4 {
-  gap: 1rem; /* gap-4 */
+.flex-1 {
+  flex: 1 1 0%; /* flex-1 */
 }
 
+/* Spacing */
 .p-0 {
   padding: 0;
+}
+
+.p-4 {
+  padding: 1rem; /* p-4 */
+}
+
+.p-6 {
+  padding: 1.5rem; /* p-6 */
+}
+
+.p-2\.5 {
+  padding: 0.625rem; /* p-2.5 */
 }
 
 .pt-0 {
@@ -56,28 +123,66 @@ body {
   padding-top: 1.5rem; /* pt-6 */
 }
 
-.p-4 {
-  padding: 1rem;
+.gap-1 {
+  gap: 0.25rem; /* gap-1 */
 }
 
-.p-6 {
-  padding: 1.5rem; /* p-6 */
+.gap-4 {
+  gap: 1rem; /* gap-4 */
 }
 
-.p-2\.5 {
-  padding: 0.625rem; /* p-2.5 */
+.space-y-1 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 0.25rem; /* space-y-1 */
 }
 
+.space-y-4 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem; /* space-y-4 */
+}
+
+/* Sizing */
+.w-full {
+  width: 100%;
+}
+
+.max-w-sm {
+  max-width: 24rem; /* max-w-sm */
+}
+
+.w-10 {
+  width: 2.5rem; /* w-10 */
+}
+
+.h-10 {
+  height: 2.5rem; /* h-10 */
+}
+
+.w-5 {
+  width: 1.25rem; /* w-5 */
+}
+
+.h-5 {
+  height: 1.25rem; /* h-5 */
+}
+
+.w-16 {
+  width: 4rem; /* w-16 */
+}
+
+.h-16 {
+  height: 4rem; /* h-16 */
+}
+
+.min-h-\[300px\] { /* min-h-[300px] from payment-failed-page */
+  min-height: 300px;
+}
+
+/* Typography */
 .text-center {
   text-align: center;
 }
 
 .text-white {
   color: #fff;
-}
-
-.text-gray-footer {
-  color: #9e9e9e;
 }
 
 .text-gray-800 {
@@ -89,7 +194,15 @@ body {
 }
 
 .text-gray-400 {
-  color: #9ca3af; /* text-gray-400 */
+  color: #9ca3af; /* placeholder:text-gray-400 */
+}
+
+.text-bkash-pink {
+  color: var(--bkash-pink);
+}
+
+.text-gray-footer { /* style={{ color: "#9e9e9e" }} */
+  color: var(--bkash-border-gray);
 }
 
 .text-xs {
@@ -127,46 +240,51 @@ body {
   text-decoration: underline;
 }
 
-.hover\:text-gray-200:hover {
-  color: #e5e7eb; /* hover:text-gray-200 */
+.whitespace-nowrap {
+  white-space: nowrap;
 }
 
-.w-full {
-  width: 100%;
+.tracking-wider { /* from pin-entry-page */
+  letter-spacing: 0.05em; /* approximate for tracking-wider */
 }
 
-.max-w-sm {
-  max-width: 24rem; /* max-w-sm */
+/* Backgrounds and Borders */
+.bg-white {
+  background-color: #fff;
 }
 
-.w-10 {
-  width: 2.5rem; /* w-10 */
+.bg-gray-100 {
+  background-color: #f3f4f6; /* bg-gray-100 */
 }
 
-.h-10 {
-  height: 2.5rem; /* h-10 */
+.bg-bkash-pink {
+  background-color: var(--bkash-pink);
 }
 
-.w-5 {
-  width: 1.25rem; /* w-5 */
+.border-t {
+  border-top-width: 1px;
+  border-top-color: #e5e7eb; /* default border color */
 }
 
-.h-5 {
-  height: 1.25rem; /* h-5 */
+.border-b {
+  border-bottom-width: 1px;
+  border-bottom-color: #e5e7eb; /* default border color */
 }
 
-.w-16 {
-  width: 4rem; /* w-16 */
+.border {
+  border-width: 1px;
+  border-color: #e5e7eb; /* default border color */
 }
 
-.h-16 {
-  height: 4rem; /* h-16 */
+.border-gray-300 {
+  border-color: #d1d5db; /* border-gray-300 */
 }
 
-.object-contain {
-  object-fit: contain;
+.border-input {
+  border-color: hsl(var(--input));
 }
 
+/* Rounded Corners & Shadows */
 .rounded-xl {
   border-radius: 0.75rem; /* rounded-xl */
 }
@@ -191,91 +309,39 @@ body {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
 }
 
-.border-t {
-  border-top-width: 1px;
+/* Object Fit */
+.object-contain {
+  object-fit: contain;
 }
 
-.border-b {
-  border-bottom-width: 1px;
+/* Interactivity */
+.cursor-pointer {
+  cursor: pointer;
 }
 
-.border {
-  border-width: 1px;
-}
-
-.border-input {
-  border-color: hsl(var(--input)); /* Use the custom property from tailwind.config */
-}
-
-.border-gray-300 {
-  border-color: #d1d5db; /* border-gray-300 */
-}
-
-.bg-white {
-  background-color: #fff;
-}
-
-.bg-gray-100 {
-  background-color: #f3f4f6; /* bg-gray-100 */
+.hover\:text-gray-200:hover {
+  color: #e5e7eb; /* hover:text-gray-200 */
 }
 
 .hover\:bg-gray-50:hover {
   background-color: #f9fafb; /* hover:bg-gray-50 */
 }
 
-.relative {
-  position: relative;
-}
-
-.flex-1 {
-  flex: 1 1 0%; /* flex-1 */
-}
-
-.space-y-1 > :not([hidden]) ~ :not([hidden]) {
-  margin-top: 0.25rem; /* space-y-1 */
-}
-
-.space-y-4 > :not([hidden]) ~ :not([hidden]) {
-  margin-top: 1rem; /* space-y-4 */
-}
-
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
-/* Custom bKash colors */
-:root {
-  --bkash-pink: #e3007f;
-  --bkash-light-pink: #ff007f;
-  --bkash-border-gray: #9e9e9e;
-  --input: 214.3 31.8% 91.4%; /* Placeholder, replace with actual hsl if available */
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-}
-
-.text-bkash-pink {
-  color: var(--bkash-pink);
-}
-
-.bg-bkash-pink {
-  background-color: var(--bkash-pink);
-}
-
 .hover\:bg-bkash-pink\/90:hover {
   background-color: rgba(227, 0, 127, 0.9); /* hover:bg-bkash-pink/90 */
 }
 
-/* Specific component styles (translated from utility classes) */
+
+/* Specific Component Styles */
+
+/* Card */
 .card-bkash {
   width: 100%;
   max-width: 24rem; /* max-w-sm */
-  border-radius: 0.75rem; /* rounded-xl */
+  border-radius: var(--radius); /* Using CSS variable */
   overflow: hidden;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-}
-
-.card-content-p0 {
-  padding: 0;
+  box-shadow: var(--tw-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
+  background-color: #fff; /* Ensure card has white background */
 }
 
 .avatar-bkash {
@@ -311,10 +377,11 @@ body {
   gap: 1rem; /* space-y-4 */
 }
 
+/* Input Fields */
 .bkash-input-white {
   width: 100%;
-  border-radius: 0.375rem; /* rounded-md */
-  border: 1px solid hsl(var(--input));
+  border-radius: var(--radius); /* rounded-md */
+  border: 1px solid hsl(var(--input)); /* default border */
   background-color: #fff;
   padding: 0.5rem 1rem; /* px-4 py-2 */
   font-size: 1rem; /* text-base */
@@ -322,29 +389,108 @@ body {
   text-align: center;
   outline: none; /* focus:outline-none */
   box-shadow: none; /* focus:ring-0 focus:ring-offset-0 */
-  border-color: transparent; /* focus:border-transparent - this will be overwritten if input is focused by user */
+  border-color: transparent; /* focus:border-transparent - initially transparent */
 }
 .bkash-input-white::placeholder {
   color: #9ca3af; /* placeholder:text-gray-400 */
 }
-/* For the PIN entry page's larger text and tracking */
+
+/* Pin Entry Specific Input Style */
 .bkash-input-white.text-2xl {
   font-size: 1.5rem; /* text-2xl */
-  letter-spacing: 0.1em; /* tracking-wider - approximate value */
+  letter-spacing: 0.05em; /* tracking-wider - approximate */
 }
 
+/* Action Buttons Container */
 .action-buttons-container {
   display: flex;
   justify-content: space-around;
-  padding: 0.625rem 1rem; /* p-2.5, added horizontal padding for consistency */
+  padding: 0.625rem; /* p-2.5 */
   gap: 1rem; /* gap-4 */
   background-color: #fff;
 }
 
-.button-outline {
+/* Buttons */
+.button-base {
   flex: 1 1 0%; /* flex-1 */
-  border-radius: 0.375rem; /* rounded-md */
+  border-radius: var(--radius); /* rounded-md */
+  box-shadow: var(--tw-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05)); /* shadow-sm */
+  padding: 0.5rem 1rem; /* A common button padding */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* transition-colors duration-200 */
+  cursor: pointer;
+}
+
+.button-outline {
+  composes: button-base;
   border: 1px solid #d1d5db; /* border border-gray-300 */
   background-color: #fff;
   color: #1f2937; /* text-gray-800 */
-  box-shadow: 0 1px 2px 0 rgba(
+}
+.button-outline:hover {
+  background-color: #f9fafb; /* hover:bg-gray-50 */
+}
+
+.button-confirm-enabled {
+  composes: button-base;
+  background-color: var(--bkash-pink);
+  color: #fff;
+}
+.button-confirm-enabled:hover {
+  background-color: rgba(227, 0, 127, 0.9); /* hover:bg-bkash-pink/90 */
+}
+
+.button-confirm-disabled {
+  composes: button-base;
+  background-color: #e5e7eb; /* bg-gray-200 */
+  color: #6b7280; /* text-gray-500 */
+  cursor: not-allowed;
+}
+
+/* Loading animation for buttons */
+/* The bounce animation from your Next.js component */
+.animate-bounce-dot {
+  width: 0.5rem; /* w-2 */
+  height: 0.5rem; /* h-2 */
+  background-color: white;
+  border-radius: 9999px; /* rounded-full */
+  animation: bounce 1.4s infinite ease-in-out;
+}
+
+.animate-bounce-dot:nth-child(2) {
+  animation-delay: 0.15s; /* style={{ animationDelay: "150ms" }} */
+}
+.animate-bounce-dot:nth-child(3) {
+  animation-delay: 0.3s; /* style={{ animationDelay: "300ms" }} */
+}
+
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(-25%);
+  }
+  40% {
+    transform: translateY(0);
+  }
+}
+
+/* Footer */
+.bkash-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem; /* p-2.5 */
+  font-size: 0.75rem; /* text-xs */
+  gap: 0.25rem; /* space-y-1 */
+  background-color: #fff; /* Ensure footer has white background */
+}
+
+/* Payment Failed Page specific styles */
+.payment-failed-section {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem; /* space-y-4 */
+}
