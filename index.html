@@ -1,427 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>bKash Payment</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_2R2m-yvB66g6yW1b8r3WfJ9kG6J7N5Lg3Q&s" type="image/x-icon">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bKash Payment - Account Number</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="flex-center-screen bg-gray-100 p-4">
+      <div class="card-bkash">
+        <div class="card-content-p0">
+          <!-- Logo Section -->
+          <div class="flex justify-center pt-0 pb-4">
+            <img src="./assets/bkash-logo.png" width="150" height="50" alt="bKash Logo" class="object-contain" />
+          </div>
 
-    <style>
-        /* আপনার existing style.css এর কিছু অংশ এখানে inline করে দেখানো হলো,
-           প্রকৃতপক্ষে এটি style.css ফাইলে থাকবে */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        .header {
-            background-color: #E21B70; /* bKash pink */
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 1.2em;
-            position: relative;
-        }
-        .header img {
-            height: 25px;
-            vertical-align: middle;
-            margin-right: 10px;
-        }
-        .header .back-btn {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            text-decoration: none;
-            font-size: 1.5em;
-        }
-        .merchant-info {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-        .merchant-info img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .merchant-details strong {
-            display: block;
-            font-size: 1.1em;
-            color: #E21B70;
-        }
-        .amount-section {
-            padding: 15px;
-            text-align: center;
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #E21B70;
-            border-bottom: 1px solid #eee;
-        }
-        .amount-details {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        .form-group {
-            padding: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: calc(100% - 30px);
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1em;
-        }
-        .terms {
-            font-size: 0.8em;
-            color: #777;
-            padding: 15px;
-            text-align: center;
-        }
-        .bottom-fixed-button {
-            position: sticky;
-            bottom: 0;
-            width: 100%;
-            background-color: #fff;
-            padding: 15px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            text-align: center;
-            box-sizing: border-box;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .bottom-fixed-button button {
-            background-color: #E21B70; /* bKash pink */
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            width: 100%;
-        }
-        .bottom-fixed-button button:disabled {
-            background-color: #f0f0f0;
-            color: #ccc;
-            cursor: not-allowed;
-        }
-        .notification-bar {
-            background-color: #f7e6f0;
-            color: #E21B70;
-            padding: 10px 15px;
-            font-size: 0.9em;
-            text-align: center;
-        }
-        .input-group {
-            padding: 15px;
-            text-align: center;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-        .input-group input {
-            width: 80%;
-            max-width: 250px;
-            padding: 10px 0;
-            border: none;
-            border-bottom: 2px solid #E21B70;
-            text-align: center;
-            font-size: 1.5em;
-            letter-spacing: 5px;
-            outline: none;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px 15px;
-            position: sticky;
-            bottom: 0;
-            background-color: #fff;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .button-container button {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: 5px;
-            font-size: 1.1em;
-            cursor: pointer;
-            border: none;
-            margin: 0 5px;
-        }
-        .button-container .cancel-button {
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .button-container .confirm-button {
-            background-color: #E21B70;
-            color: white;
-            opacity: 0.6; /* Initially disabled */
-            cursor: not-allowed; /* Initially disabled */
-        }
-        .button-container .confirm-button:enabled {
-            opacity: 1;
-            cursor: pointer;
-        }
-        .pin-number-display {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #555;
-        }
-        .copyright {
-            text-align: center;
-            padding: 10px;
-            font-size: 0.8em;
-            color: #888;
-            margin-top: auto; /* Push to bottom */
-        }
-        .call-center {
-            text-align: center;
-            font-size: 0.9em;
-            color: #E21B70;
-            margin-bottom: 5px;
-        }
-        .disabled-button {
-            background-color: #f0f0f0;
-            color: #ccc;
-            cursor: not-allowed;
-        }
+          <!-- Transaction Summary -->
+          <div class="flex items-center gap-4 p-4 border-t border-b bg-white">
+            <div class="avatar-bkash">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-shopping-cart"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              </svg>
+              <span class="sr-only">Shopping Cart</span>
+            </div>
+            <div class="flex-1">
+              <p class="text-xs font-medium text-gray-800">PromoShop.com</p>
+              <p class="text-[10px] text-gray-500">Inv No: NNT_6094bc8028702...</p>
+            </div>
+            <div class="text-lg font-semibold text-gray-800">৳49.00</div>
+          </div>
 
-        /* Page specific styles */
-        .page {
-            display: none; /* By default, hide all pages */
-            flex-direction: column;
-            flex-grow: 1; /* Allow pages to grow and fill space */
-        }
-        .page.active {
-            display: flex; /* Show active page */
-        }
-        .header .page-title {
-            margin-left: 20px; /* Adjust for back button */
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <!-- Page 1: Initial Payment Confirmation -->
-        <div id="page1" class="page active">
-            <div class="header">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_2R2m-yvB66g6yW1b8r3WfJ9kG6J7N5Lg3Q&s" alt="bKash Logo">
-                <span class="page-title">bKash Payment</span>
+          <!-- Account Number Input Section -->
+          <div class="bkash-pink-bg-section">
+            <h2 class="text-lg font-semibold text-center">Your bKash Account Number</h2>
+            <div class="relative flex items-center">
+              <input
+                type="tel"
+                placeholder="e.g 01XXXXXXXXX"
+                class="bkash-input-white text-center"
+                maxlength="11"
+                value=""
+              />
             </div>
-            <div class="merchant-info">
-                <img src="https://image.pngfou.com/131/192/13119253e77cf16f73eb1203b879a957_thumb.png" alt="PromoShop.com Logo">
-                <div class="merchant-details">
-                    <strong>PromoShop.com</strong>
-                    <small>Inv No: NNT_6094bc8028702...</small>
-                </div>
-                <span style="margin-left: auto; font-size: 1.2em; font-weight: bold;">৳49.00</span>
+            <p class="text-xs text-center">
+              Confirm and proceed,
+              <a
+                href="https://www.bkash.com/en/page/tokenized_checkout"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium underline text-white hover:text-gray-200"
+              >
+                terms & conditions
+              </a>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons-container">
+            <button class="button-outline" onclick="window.location.href='index.html'">Cancel</button>
+            <!-- In static HTML, this button is disabled. You would enable it with JS -->
+            <button disabled class="button-confirm-disabled">Confirm</button>
+          </div>
+
+          <!-- Footer -->
+          <div class="bkash-footer">
+            <div class="flex items-center gap-1 text-bkash-pink">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-phone-call"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+              <span>16247</span>
             </div>
-            <div class="amount-section">
-                <span>৳49.00</span>
-            </div>
-            <div class="amount-details">
-                <span>New Balance</span>
-                <span>৳800.00</span>
-            </div>
-            <div class="amount-details">
-                <span>Old Balance</span>
-                <span>৳849.00</span>
-            </div>
-            <div class="form-group">
-                <label for="phoneNumber">Your bKash Account No.</label>
-                <input type="text" id="phoneNumber" value="017********53" readonly>
-            </div>
-            <div class="terms">
-                By clicking "Proceed" you are agreeing to the
-                <a href="#" style="color: #E21B70; text-decoration: none;">Terms & Conditions</a>
-            </div>
-            <div class="bottom-fixed-button">
-                <button id="proceedToPage2">Proceed</button>
-            </div>
+            <p class="text-xs text-gray-footer">© 2025 bKash, All Rights Reserved</p>
+          </div>
         </div>
-
-        <!-- Page 2: OTP/Verification Page -->
-        <div id="page2" class="page">
-            <div class="header">
-                <a href="#" class="back-btn" id="backToPage1">&lt;</a>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_2R2m-yvB66g6yW1b8r3WfJ9kG6J7N5Lg3Q&s" alt="bKash Logo">
-                <span class="page-title">bKash Payment</span>
-            </div>
-            <div class="notification-bar">
-                A verification code has been sent to your bKash Account 017********53
-            </div>
-            <div class="input-group">
-                <label for="verificationCode">Enter Verification Code</label>
-                <input type="number" id="verificationCode" maxlength="6" placeholder="******">
-            </div>
-            <div class="terms">
-                If you do not receive the verification code, tap
-                <a href="#" style="color: #E21B70; text-decoration: none;">Resend Code</a>
-            </div>
-            <div class="bottom-fixed-button">
-                <button id="confirmVerification" class="disabled-button" disabled>Confirm</button>
-            </div>
-        </div>
-
-        <!-- Page 3: PIN Entry Page -->
-        <div id="page3" class="page">
-            <div class="header">
-                <a href="#" class="back-btn" id="backToPage2">&lt;</a>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_2R2m-yvB66g6yW1b8r3WfJ9kG6J7N5Lg3Q&s" alt="bKash Logo">
-                <span class="page-title">bKash Payment</span>
-            </div>
-            <div class="notification-bar">
-                Enter PIN of your bKash account number
-            </div>
-            <div class="pin-number-display">
-                015 *** *** 545
-            </div>
-            <div class="input-group">
-                <input type="password" id="pinInput" maxlength="5" placeholder="_____">
-            </div>
-            <div class="call-center">
-                Need help? Call 16247
-            </div>
-            <div class="copyright">
-                © 2025 bKash, All Rights Reserved
-            </div>
-            <div class="button-container">
-                <button class="cancel-button" id="cancelPinEntry">Cancel</button>
-                <button class="confirm-button" id="confirmPin" disabled>Confirm</button>
-            </div>
-        </div>
-
+      </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to show a specific page and hide others
-            function showPage(pageId) {
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById(pageId).classList.add('active');
-            }
-
-            // --- Page 1 Logic ---
-            const proceedToPage2Button = document.getElementById('proceedToPage2');
-            if (proceedToPage2Button) {
-                proceedToPage2Button.addEventListener('click', function() {
-                    showPage('page2');
-                });
-            }
-
-            // --- Page 2 Logic ---
-            const backToPage1Button = document.getElementById('backToPage1');
-            const verificationCodeInput = document.getElementById('verificationCode');
-            const confirmVerificationButton = document.getElementById('confirmVerification');
-
-            if (backToPage1Button) {
-                backToPage1Button.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent default link behavior
-                    showPage('page1');
-                });
-            }
-
-            if (verificationCodeInput && confirmVerificationButton) {
-                verificationCodeInput.addEventListener('input', function() {
-                    if (this.value.length === 6) { // OTP is typically 6 digits
-                        confirmVerificationButton.removeAttribute('disabled');
-                        confirmVerificationButton.classList.remove('disabled-button');
-                    } else {
-                        confirmVerificationButton.setAttribute('disabled', 'true');
-                        confirmVerificationButton.classList.add('disabled-button');
-                    }
-                });
-
-                confirmVerificationButton.addEventListener('click', function() {
-                    if (!this.hasAttribute('disabled')) {
-                        // Here you might add logic to verify OTP
-                        showPage('page3');
-                    }
-                });
-            }
-
-
-            // --- Page 3 Logic (PIN Entry) ---
-            const backToPage2Button = document.getElementById('backToPage2');
-            const pinInput = document.getElementById('pinInput');
-            const confirmPinButton = document.getElementById('confirmPin');
-            const cancelPinEntryButton = document.getElementById('cancelPinEntry');
-
-            if (backToPage2Button) {
-                backToPage2Button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    showPage('page2');
-                });
-            }
-
-            if (pinInput && confirmPinButton) {
-                // Ensure initial state for confirm button on page load
-                confirmPinButton.setAttribute('disabled', 'true');
-                confirmPinButton.style.opacity = '0.6';
-                confirmPinButton.style.cursor = 'not-allowed';
-
-                pinInput.addEventListener('input', function() {
-                    if (this.value.length === 5) { // bKash PIN is usually 5 digits
-                        confirmPinButton.removeAttribute('disabled');
-                        confirmPinButton.style.opacity = '1';
-                        confirmPinButton.style.cursor = 'pointer';
-                    } else {
-                        confirmPinButton.setAttribute('disabled', 'true');
-                        confirmPinButton.style.opacity = '0.6';
-                        confirmPinButton.style.cursor = 'not-allowed';
-                    }
-                });
-
-                confirmPinButton.addEventListener('click', function() {
-                    if (!this.hasAttribute('disabled')) {
-                        // Here you would typically send the PIN to a backend for verification
-                        alert('PIN Submitted! Processing Payment...');
-                        // For demonstration, let's redirect to a success page or show a success message
-                        // You might want to simulate a loading state here
-                        // For a real application, you'd make an AJAX call.
-                        // Example: window.location.href = 'success.html';
-                    }
-                });
-            }
-
-            if (cancelPinEntryButton) {
-                cancelPinEntryButton.addEventListener('click', function() {
-                    alert('Payment Cancelled.');
-                    showPage('page1'); // Go back to the first page or a home page
-                    // Or simply close the modal/window
-                });
-            }
-        });
-    </script>
-</body>
+  </body>
 </html>
