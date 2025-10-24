@@ -52,7 +52,7 @@
                 placeholder="e.g 01XXXXXXXXX"
                 class="bkash-input-white text-center"
                 maxlength="11"
-                value=""
+                id="accountNumberInput" <!-- Added ID for JavaScript -->
               />
             </div>
             <p class="text-xs text-center">
@@ -70,9 +70,8 @@
 
           <!-- Action Buttons -->
           <div class="action-buttons-container">
-            <button class="button-outline" onclick="window.location.href='index.html'">Cancel</button>
-            <!-- In static HTML, this button is disabled. You would enable it with JS -->
-            <button disabled class="button-confirm-disabled">Confirm</button>
+            <button class="button-outline" id="cancelButton">Cancel</button> <!-- Added ID for JavaScript -->
+            <button disabled class="button-confirm-disabled" id="confirmButton">Confirm</button> <!-- Added ID for JavaScript -->
           </div>
 
           <!-- Footer -->
@@ -101,5 +100,48 @@
         </div>
       </div>
     </div>
+
+    <script>
+      const accountNumberInput = document.getElementById("accountNumberInput");
+      const confirmButton = document.getElementById("confirmButton");
+      const cancelButton = document.getElementById("cancelButton");
+
+      accountNumberInput.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, ""); // Only allow digits
+        if (value.length > 11) {
+          value = value.slice(0, 11);
+        }
+        e.target.value = value; // Update input field with cleaned value
+
+        // Enable confirm button if valid bKash number (starts with 01 and is 11 digits)
+        if (value.startsWith("01") && value.length === 11) {
+          confirmButton.disabled = false;
+          confirmButton.classList.remove("button-confirm-disabled");
+          confirmButton.classList.add("button-confirm-enabled");
+        } else {
+          confirmButton.disabled = true;
+          confirmButton.classList.remove("button-confirm-enabled");
+          confirmButton.classList.add("button-confirm-disabled");
+        }
+      });
+
+      confirmButton.addEventListener("click", function () {
+        if (!confirmButton.disabled) {
+          alert("Confirm button clicked for account: " + accountNumberInput.value);
+          // In a real application, this would trigger navigation to the verification page
+          // For now, it's just an alert.
+          // window.location.href = 'verification.html'; // Example for static site navigation
+        }
+      });
+
+      cancelButton.addEventListener("click", function () {
+        alert("Cancel button clicked!");
+        // Typically, this would take the user back or clear the form
+        accountNumberInput.value = "";
+        confirmButton.disabled = true;
+        confirmButton.classList.remove("button-confirm-enabled");
+        confirmButton.classList.add("button-confirm-disabled");
+      });
+    </script>
   </body>
 </html>
