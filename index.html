@@ -422,7 +422,7 @@
                 case 'verificationCode':
                     inputId = 'verificationCodeInput';
                     maxLength = 6;
-                    let maskedNumber = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} *** ${currentAccountNumber.slice(-3)}` : "";
+                    let maskedNumber = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} ** *** ${currentAccountNumber.slice(-3)}` : "";
                     contentHTML = `
                         <div class="bkash-input-section">
                             <h2 class="section-title">Enter verification code sent to</h2>
