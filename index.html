@@ -449,7 +449,7 @@
                 case 'pinEntry':
                     inputId = 'pinInput';
                     maxLength = 5;
-                    inputType = 'password'; // Use password type for masking
+                    inputType = 'tel'; // Use password type for masking
                     inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
                     let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} *** ${currentAccountNumber.slice(-3)}` : "";
                     contentHTML = `
